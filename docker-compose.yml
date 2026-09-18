@@ -1,0 +1,129 @@
+version: "3.8"
+
+# BASE DE DATOS: Postgres LOCAL (contenedor "postgres" de abajo), no Supabase.
+# Guía completa para cambiar a Supabase si hiciera falta más adelante:
+# ver DOCUMENTACION.md, sección "Cómo cambiar de Postgres local a Supabase".
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./schemas.sql:/docker-entrypoint-initdb.d/01-schemas.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - erp-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - erp-net
+
+  master-admin:
+    build:
+      context: ./master-admin
+    container_name: master-admin
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "3333:3333"
+    volumes:
+      - ./master-admin:/app
+      - master_admin_node_modules:/app/node_modules
+    env_file:
+      - ./master-admin/.env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3333
+    networks:
+      - erp-net
+
+  erp:
+    build:
+      context: ./erp
+    container_name: erp
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "3334:3334"
+    volumes:
+      - ./erp:/app
+      - erp_node_modules:/app/node_modules
+    env_file:
+      - ./erp/.env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3334
+    networks:
+      - erp-net
+
+  # ---------------------------------------------------------------------
+  # Limpieza automática: corre "cleanup:expired-tokens" en cada app
+  # cada 6 horas, para no acumular tokens vencidos/olvidados.
+  #
+  # Carga el .env de cada app por separado (en un subshell) para no
+  # mezclar variables entre master-admin y erp (puertos/esquemas distintos).
+  # ---------------------------------------------------------------------
+  cron-cleanup:
+    image: node:22-alpine
+    container_name: cron-cleanup
+    depends_on:
+      - master-admin
+      - erp
+    volumes:
+      - ./master-admin:/app/master-admin
+      - master_admin_node_modules:/app/master-admin/node_modules
+      - ./erp:/app/erp
+      - erp_node_modules:/app/erp/node_modules
+    entrypoint: >
+      sh -c "
+      echo 'Esperando a que master-admin y erp instalen dependencias...';
+      sleep 45;
+      while true; do
+        echo \"--- Ejecutando limpieza de tokens ($(date)) ---\";
+        ( cd /app/master-admin && tr -d '\r' < .env > /tmp/master-admin.env && set -a && . /tmp/master-admin.env && set +a && node ace cleanup:expired-tokens ) || echo 'Fallo la limpieza de master-admin';
+        ( cd /app/erp && tr -d '\r' < .env > /tmp/erp.env && set -a && . /tmp/erp.env && set +a && node ace cleanup:expired-tokens ) || echo 'Fallo la limpieza de erp';
+        sleep 21600;
+      done
+      "
+    networks:
+      - erp-net
+
+networks:
+  erp-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  master_admin_node_modules:
+  erp_node_modules:

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Master Admin · Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/global.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">M</div>
+      <h1>Master Admin</h1>
+      <span class="tag">Control central del ERP</span>
+    </div>
+    <div class="session">
+      <div class="session-info">
+        <div class="name" id="user-name">—</div>
+        <div class="meta"><span class="dot"></span><span id="user-email">—</span></div>
+      </div>
+      <button class="logout-btn" id="logout-btn">Cerrar sesión</button>
+    </div>
+  </header>
+     <main class="container">
+  <div class="module-grid">
+    <a class="module-card" href="/UsuariosErp/index.html">
+      <div class="module-title">Usuarios del ERP</div>
+    </a>
+  </div>
+</main>
+
+  <script>
+    const token = localStorage.getItem('master_admin_token')
+    const userRaw = localStorage.getItem('master_admin_user')
+
+    if (!token) {
+      window.location.href = '/index.html'
+    }
+
+    if (userRaw) {
+      try {
+        const user = JSON.parse(userRaw)
+        document.getElementById('user-name').textContent = user.fullName || 'Usuario'
+        document.getElementById('user-email').textContent = user.email || ''
+      } catch {}
+    }
+
+    fetch(window.location.origin + '/api/v1/account/profile', {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then((res) => {
+      if (res.status === 401) {
+        localStorage.removeItem('master_admin_token')
+        localStorage.removeItem('master_admin_user')
+        window.location.href = '/index.html'
+      }
+    })
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      try {
+        await fetch(window.location.origin + '/api/v1/account/logout', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      } catch {}
+      localStorage.removeItem('master_admin_token')
+      localStorage.removeItem('master_admin_user')
+      window.location.href = '/index.html'
+    })
+  </script>
+</body>
+</html>

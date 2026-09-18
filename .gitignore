@@ -1,0 +1,15 @@
+# AdonisJS (master-admin y erp)
+**/node_modules/
+**/.adonisjs/
+**/build/
+**/tmp/*
+!**/tmp/.gitkeep
+**/.env
+**/.env.local
+**/.env.production.local
+**/.env.development.local
+**/coverage/
+
+# Sistema
+.DS_Store
+Thumbs.db
