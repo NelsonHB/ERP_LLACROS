@@ -1,0 +1,22 @@
+/*
+ * =========================================================
+ * DASHBOARD
+ * =========================================================
+ *
+ * El diseño principal del Dashboard ya está definido
+ * en global.css.
+ *
+ * Este archivo queda separado para agregar futuros estilos
+ * exclusivos del Dashboard sin modificar global.css.
+ */
+
+
+/* Botones del menú */
+
+#pos-menu,
+#sales-history-menu,
+#customers-menu {
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}

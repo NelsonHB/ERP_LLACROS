@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>ERP · Historial de ventas</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/sales-history.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-brand">
+
+      <div class="sidebar-logo">E</div>
+
+      <div class="sidebar-brand-text">
+        <strong>ERP</strong>
+        <span>Grupo Llacros</span>
+      </div>
+
+      <button
+        class="sidebar-toggle"
+        id="sidebar-toggle"
+        type="button"
+        aria-label="Contraer menú"
+        title="Contraer menú"
+      >
+        ‹
+      </button>
+
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+      <div class="menu-section-title">
+        PRINCIPAL
+      </div>
+
+      <button
+        class="menu-item"
+        id="dashboard-menu"
+        type="button"
+      >
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+        </span>
+
+        <span>Dashboard</span>
+      </button>
+
+
+      <div class="menu-section-title">
+        VENTAS
+      </div>
+
+      <button
+        class="menu-item"
+        id="pos-menu"
+        type="button"
+      >
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 3h2l2.5 11h10l2-7H7"></path>
+            <circle cx="10" cy="19" r="1"></circle>
+            <circle cx="18" cy="19" r="1"></circle>
+          </svg>
+        </span>
+
+        <span>Punto de venta</span>
+      </button>
+
+
+      <button
+        class="menu-item active"
+        type="button"
+      >
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 3v18h18"></path>
+            <path d="m7 16 4-5 3 3 5-7"></path>
+          </svg>
+        </span>
+
+        <span>Historial de ventas</span>
+      </button>
+
+
+      <button
+        class="menu-item"
+        id="customers-menu"
+        type="button"
+      >
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+          </svg>
+        </span>
+
+        <span>Clientes</span>
+      </button>
+
+
+      <div class="menu-section-title">
+        GESTIÓN
+      </div>
+
+      <button class="menu-item" type="button">
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path>
+            <path d="M3 7.5 12 12l9-4.5"></path>
+            <path d="M12 12v9"></path>
+          </svg>
+        </span>
+
+        <span>Inventario</span>
+      </button>
+
+
+      <button class="menu-item" type="button">
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 10 12 4l9 6"></path>
+            <path d="M5 9v11h14V9"></path>
+            <path d="M8 20v-6h8v6"></path>
+          </svg>
+        </span>
+
+        <span>Almacenes</span>
+      </button>
+
+
+      <button class="menu-item" type="button">
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+          </svg>
+        </span>
+
+        <span>Usuarios</span>
+      </button>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <div class="sidebar-company">
+
+        <span class="company-indicator"></span>
+
+        <div>
+          <strong>Empresa activa</strong>
+          <small>Grupo Llacros</small>
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- CONTENIDO -->
+  <div class="main-area">
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+        <div>
+          <h1>Historial de ventas</h1>
+          <p>Consulta y analiza las ventas registradas</p>
+        </div>
+      </div>
+
+
+      <div class="session">
+
+        <div class="session-info">
+
+          <div
+            class="name"
+            id="user-name"
+          >
+            —
+          </div>
+
+          <div class="meta">
+            <span class="dot"></span>
+            <span id="user-email">—</span>
+          </div>
+
+        </div>
+
+
+        <button
+          class="logout-btn"
+          id="logout-btn"
+          type="button"
+        >
+          Cerrar sesión
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <main class="history-content">
+
+      <!-- TÍTULO -->
+
+      <section class="history-heading">
+
+        <div>
+          <span class="eyebrow">VENTAS</span>
+
+          <h2>
+            Historial de ventas
+          </h2>
+
+          <p>
+            Visualiza, filtra y analiza las operaciones realizadas.
+          </p>
+        </div>
+
+        <button
+          class="new-sale-button"
+          id="new-sale-button"
+          type="button"
+        >
+          + Nueva venta
+        </button>
+
+      </section>
+
+
+      <!-- INDICADORES -->
+
+      <section class="summary-grid">
+
+        <article class="summary-card">
+
+          <span class="summary-label">
+            Ventas realizadas
+          </span>
+
+          <strong id="summary-sales">
+            0
+          </strong>
+
+          <small>
+            operaciones encontradas
+          </small>
+
+        </article>
+
+
+        <article class="summary-card">
+
+          <span class="summary-label">
+            Ingresos
+          </span>
+
+          <strong id="summary-revenue">
+            S/ 0.00
+          </strong>
+
+          <small>
+            total facturado
+          </small>
+
+        </article>
+
+
+        <article class="summary-card">
+
+          <span class="summary-label">
+            Ticket promedio
+          </span>
+
+          <strong id="summary-average">
+            S/ 0.00
+          </strong>
+
+          <small>
+            promedio por venta
+          </small>
+
+        </article>
+
+
+        <article class="summary-card">
+
+          <span class="summary-label">
+            Unidades vendidas
+          </span>
+
+          <strong id="summary-units">
+            0
+          </strong>
+
+          <small id="summary-unit-average">
+            Promedio: 0 por venta
+          </small>
+
+        </article>
+
+      </section>
+
+
+      <!-- FILTROS -->
+
+      <section class="filter-panel">
+
+        <div class="filter-panel-heading">
+
+          <div>
+            <h3>Filtros</h3>
+            <p>Clasifica las ventas según diferentes criterios.</p>
+          </div>
+
+          <button
+            class="clear-filters"
+            id="clear-filters"
+            type="button"
+          >
+            Limpiar filtros
+          </button>
+
+        </div>
+
+
+        <div class="filters-grid">
+
+          <!-- BUSCADOR -->
+
+          <div class="filter-group filter-search">
+
+            <label for="search-sale">
+              Buscar
+            </label>
+
+            <div class="history-search">
+
+              <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-4-4"></path>
+              </svg>
+
+              <input
+                id="search-sale"
+                type="text"
+                placeholder="Venta, cliente o producto..."
+                autocomplete="off"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- MES -->
+
+          <div class="filter-group">
+
+            <label for="month-filter">
+              Mes
+            </label>
+
+            <select id="month-filter">
+              <option value="all">Todos los meses</option>
+            </select>
+
+          </div>
+
+
+          <!-- CATEGORÍA -->
+
+          <div class="filter-group">
+
+            <label for="category-filter">
+              Tipo de producto
+            </label>
+
+            <select id="category-filter">
+              <option value="all">Todas las categorías</option>
+              <option value="Laptops">Laptops</option>
+              <option value="Periféricos">Periféricos</option>
+              <option value="Componentes">Componentes</option>
+              <option value="Accesorios">Accesorios</option>
+            </select>
+
+          </div>
+
+
+          <!-- COMPROBANTE -->
+
+          <div class="filter-group">
+
+            <label for="document-filter">
+              Comprobante
+            </label>
+
+            <select id="document-filter">
+              <option value="all">Todos</option>
+              <option value="Boleta">Boleta</option>
+              <option value="Factura">Factura</option>
+            </select>
+
+          </div>
+
+
+          <!-- MÉTODO PAGO -->
+
+          <div class="filter-group">
+
+            <label for="payment-filter">
+              Método de pago
+            </label>
+
+            <select id="payment-filter">
+              <option value="all">Todos</option>
+              <option value="Efectivo">Efectivo</option>
+              <option value="Tarjeta">Tarjeta</option>
+              <option value="Yape">Yape</option>
+              <option value="Plin">Plin</option>
+            </select>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ANÁLISIS POR CATEGORÍA -->
+
+      <section class="analysis-panel">
+
+        <div class="section-heading">
+
+          <div>
+            <h3>Resumen por tipo de producto</h3>
+            <p>
+              Rendimiento de las categorías dentro de los filtros seleccionados.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div
+          class="category-analysis"
+          id="category-analysis"
+        ></div>
+
+      </section>
+
+
+      <!-- TABLA -->
+
+      <section class="sales-panel">
+
+        <div class="sales-panel-header">
+
+          <div>
+            <h3>Ventas registradas</h3>
+
+            <p id="results-text">
+              0 resultados
+            </p>
+          </div>
+
+
+          <div class="table-actions">
+
+            <label for="sort-sales">
+              Ordenar:
+            </label>
+
+            <select id="sort-sales">
+
+              <option value="newest">
+                Más recientes
+              </option>
+
+              <option value="oldest">
+                Más antiguas
+              </option>
+
+              <option value="highest">
+                Mayor importe
+              </option>
+
+              <option value="lowest">
+                Menor importe
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+          <table class="sales-table">
+
+            <thead>
+
+              <tr>
+                <th>Venta</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Comprobante</th>
+                <th>Productos</th>
+                <th>Pago</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+
+            </thead>
+
+
+            <tbody id="sales-table-body"></tbody>
+
+          </table>
+
+        </div>
+
+
+        <div
+          class="no-sales"
+          id="no-sales"
+        >
+          No se encontraron ventas con los filtros seleccionados.
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+</div>
+
+
+<!-- MODAL DETALLE -->
+
+<div
+  class="history-modal-overlay"
+  id="detail-modal"
+>
+
+  <div class="history-modal">
+
+    <div class="history-modal-header">
+
+      <div>
+        <span class="eyebrow">
+          DETALLE DE VENTA
+        </span>
+
+        <h2 id="detail-sale-number">
+          Venta
+        </h2>
+      </div>
+
+      <button
+        class="history-modal-close"
+        id="close-detail-modal"
+        type="button"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="sale-information">
+
+      <div>
+        <span>Fecha</span>
+        <strong id="detail-date">—</strong>
+      </div>
+
+      <div>
+        <span>Cliente</span>
+        <strong id="detail-customer">—</strong>
+      </div>
+
+      <div>
+        <span>Comprobante</span>
+        <strong id="detail-document">—</strong>
+      </div>
+
+      <div>
+        <span>Método de pago</span>
+        <strong id="detail-payment">—</strong>
+      </div>
+
+    </div>
+
+
+    <div class="detail-products">
+
+      <h3>Productos</h3>
+
+      <div id="detail-products-list"></div>
+
+    </div>
+
+
+    <div class="detail-totals">
+
+      <div>
+        <span>Subtotal</span>
+        <strong id="detail-subtotal">
+          S/ 0.00
+        </strong>
+      </div>
+
+      <div>
+        <span>IGV (18%)</span>
+        <strong id="detail-igv">
+          S/ 0.00
+        </strong>
+      </div>
+
+      <div class="detail-total-row">
+        <span>Total</span>
+        <strong id="detail-total">
+          S/ 0.00
+        </strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script src="js/sales-history.js"></script>
+
+</body>
+</html>

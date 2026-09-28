@@ -16,64 +16,63 @@
   />
 
   <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
 </head>
 
 <body>
 
-  <!-- =====================================================
-       ESTRUCTURA PRINCIPAL
-       ===================================================== -->
-
   <div class="app-layout">
 
-    <!-- ===================================================
-         SIDEBAR
-         =================================================== -->
-
+    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
 
-  <div class="sidebar-brand">
+      <div class="sidebar-brand">
 
-    <div class="sidebar-logo">
-      E
-    </div>
+        <div class="sidebar-logo">
+          E
+        </div>
 
-    <div class="sidebar-brand-text">
-      <strong>ERP</strong>
-      <span>Grupo Llacros</span>
-    </div>
+        <div class="sidebar-brand-text">
+          <strong>ERP</strong>
+          <span>Grupo Llacros</span>
+        </div>
 
-    <button
-      class="sidebar-toggle"
-      id="sidebar-toggle"
-      type="button"
-      aria-label="Contraer menú"
-      title="Contraer menú"
-    >
-      ‹
-    </button>
+        <button
+          class="sidebar-toggle"
+          id="sidebar-toggle"
+          type="button"
+          aria-label="Contraer menú"
+          title="Contraer menú"
+        >
+          ‹
+        </button>
 
-  </div>
+      </div>
 
 
-      <!-- Menú principal -->
       <nav class="sidebar-menu">
+
+        <!-- PRINCIPAL -->
 
         <div class="menu-section-title">
           PRINCIPAL
         </div>
 
-        <!-- Dashboard -->
-        <button class="menu-item active" type="button">
+        <button
+          class="menu-item active"
+          id="dashboard-menu"
+          type="button"
+        >
 
           <span class="menu-icon">
-            <!-- Grid -->
+
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <rect x="3" y="3" width="7" height="7" rx="1"></rect>
               <rect x="14" y="3" width="7" height="7" rx="1"></rect>
               <rect x="3" y="14" width="7" height="7" rx="1"></rect>
               <rect x="14" y="14" width="7" height="7" rx="1"></rect>
             </svg>
+
           </span>
 
           <span>Dashboard</span>
@@ -81,21 +80,130 @@
         </button>
 
 
+        <!-- VENTAS -->
+
+        <div class="menu-section-title">
+          VENTAS
+        </div>
+
+
+        <!-- POS -->
+
+        <button
+          class="menu-item"
+          id="pos-menu"
+          type="button"
+        >
+
+          <span class="menu-icon">
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+              <path d="M3 3h2l2.5 11h10l2-7H7"></path>
+
+              <circle
+                cx="10"
+                cy="19"
+                r="1"
+              ></circle>
+
+              <circle
+                cx="18"
+                cy="19"
+                r="1"
+              ></circle>
+
+            </svg>
+
+          </span>
+
+          <span>Punto de venta</span>
+
+        </button>
+
+
+        <!-- HISTORIAL -->
+
+        <button
+          class="menu-item"
+          id="sales-history-menu"
+          type="button"
+        >
+
+          <span class="menu-icon">
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+              <path d="M3 3v18h18"></path>
+
+              <path d="m7 16 4-5 3 3 5-7"></path>
+
+            </svg>
+
+          </span>
+
+          <span>Historial de ventas</span>
+
+        </button>
+
+
+        <!-- CLIENTES -->
+
+        <button
+          class="menu-item"
+          id="customers-menu"
+          type="button"
+        >
+
+          <span class="menu-icon">
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+
+              <circle
+                cx="9"
+                cy="7"
+                r="4"
+              ></circle>
+
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+
+            </svg>
+
+          </span>
+
+          <span>Clientes</span>
+
+        </button>
+
+
+        <!-- GESTIÓN -->
+
         <div class="menu-section-title">
           GESTIÓN
         </div>
 
 
-        <!-- Inventario -->
-        <button class="menu-item" type="button">
+        <!-- INVENTARIO -->
+
+        <button
+          class="menu-item pending-menu"
+          type="button"
+        >
 
           <span class="menu-icon">
-            <!-- Caja -->
+
             <svg viewBox="0 0 24 24" aria-hidden="true">
+
               <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path>
+
               <path d="M3 7.5 12 12l9-4.5"></path>
+
               <path d="M12 12v9"></path>
+
             </svg>
+
           </span>
 
           <span>Inventario</span>
@@ -103,19 +211,31 @@
         </button>
 
 
-        <!-- Almacenes -->
-        <button class="menu-item" type="button">
+        <!-- ALMACENES -->
+
+        <button
+          class="menu-item pending-menu"
+          type="button"
+        >
 
           <span class="menu-icon">
-            <!-- Almacén -->
+
             <svg viewBox="0 0 24 24" aria-hidden="true">
+
               <path d="M3 10 12 4l9 6"></path>
+
               <path d="M5 9v11h14V9"></path>
+
               <path d="M8 20v-6h8v6"></path>
+
               <path d="M8 11h.01"></path>
+
               <path d="M12 11h.01"></path>
+
               <path d="M16 11h.01"></path>
+
             </svg>
+
           </span>
 
           <span>Almacenes</span>
@@ -123,17 +243,31 @@
         </button>
 
 
-        <!-- Usuarios -->
-        <button class="menu-item" type="button">
+        <!-- USUARIOS -->
+
+        <button
+          class="menu-item pending-menu"
+          type="button"
+        >
 
           <span class="menu-icon">
-            <!-- Usuarios -->
+
             <svg viewBox="0 0 24 24" aria-hidden="true">
+
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
+
+              <circle
+                cx="9"
+                cy="7"
+                r="4"
+              ></circle>
+
               <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+
               <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+
             </svg>
+
           </span>
 
           <span>Usuarios</span>
@@ -143,16 +277,19 @@
       </nav>
 
 
-      <!-- Parte inferior -->
+      <!-- EMPRESA -->
+
       <div class="sidebar-bottom">
 
         <div class="sidebar-company">
+
           <span class="company-indicator"></span>
 
           <div>
             <strong>Empresa activa</strong>
             <small>Grupo Llacros</small>
           </div>
+
         </div>
 
       </div>
@@ -160,34 +297,38 @@
     </aside>
 
 
-    <!-- ===================================================
-         CONTENIDO
-         =================================================== -->
-
+    <!-- CONTENIDO -->
     <div class="main-area">
 
       <!-- HEADER -->
+
       <header class="topbar">
 
         <div class="topbar-left">
 
           <div>
+
             <h1>Dashboard</h1>
 
             <p>
               Resumen general del sistema
             </p>
+
           </div>
 
         </div>
 
 
         <!-- SESIÓN -->
+
         <div class="session">
 
           <div class="session-info">
 
-            <div class="name" id="user-name">
+            <div
+              class="name"
+              id="user-name"
+            >
               —
             </div>
 
@@ -203,6 +344,7 @@
 
           </div>
 
+
           <button
             class="logout-btn"
             id="logout-btn"
@@ -216,13 +358,12 @@
       </header>
 
 
-      <!-- =================================================
-           CONTENIDO DEL DASHBOARD
-           ================================================= -->
+      <!-- DASHBOARD -->
 
       <main class="dashboard-content">
 
-        <!-- Encabezado -->
+        <!-- BIENVENIDA -->
+
         <section class="welcome">
 
           <div>
@@ -246,19 +387,28 @@
 
 
         <!-- TARJETAS -->
+
         <section class="dashboard-cards">
 
 
-          <!-- Inventario -->
+          <!-- INVENTARIO -->
+
           <div class="dashboard-card">
 
             <div class="card-icon inventory-icon">
+
               <svg viewBox="0 0 24 24">
+
                 <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path>
+
                 <path d="M3 7.5 12 12l9-4.5"></path>
+
                 <path d="M12 12v9"></path>
+
               </svg>
+
             </div>
+
 
             <div class="card-content">
 
@@ -279,16 +429,24 @@
           </div>
 
 
-          <!-- Almacenes -->
+          <!-- ALMACENES -->
+
           <div class="dashboard-card">
 
             <div class="card-icon warehouse-icon">
+
               <svg viewBox="0 0 24 24">
+
                 <path d="M3 10 12 4l9 6"></path>
+
                 <path d="M5 9v11h14V9"></path>
+
                 <path d="M8 20v-6h8v6"></path>
+
               </svg>
+
             </div>
+
 
             <div class="card-content">
 
@@ -309,17 +467,30 @@
           </div>
 
 
-          <!-- Usuarios -->
+          <!-- USUARIOS -->
+
           <div class="dashboard-card">
 
             <div class="card-icon users-icon">
+
               <svg viewBox="0 0 24 24">
+
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
+
+                <circle
+                  cx="9"
+                  cy="7"
+                  r="4"
+                ></circle>
+
                 <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+
               </svg>
+
             </div>
+
 
             <div class="card-content">
 
@@ -341,8 +512,6 @@
 
         </section>
 
-
-       
       </main>
 
     </div>
@@ -350,154 +519,8 @@
   </div>
 
 
-  <!-- =====================================================
-       JAVASCRIPT
-       ===================================================== -->
-
-  <script>
-
-    const token = localStorage.getItem('erp_token')
-    const userRaw = localStorage.getItem('erp_user')
-
-    // Si no existe sesión, volver al login
-    if (!token) {
-      window.location.href = '/index.html'
-    }
-
-
-    // Mostrar información del usuario
-    if (userRaw) {
-
-      try {
-
-        const user = JSON.parse(userRaw)
-
-        document.getElementById('user-name').textContent =
-          user.fullName || 'Usuario'
-
-        document.getElementById('user-email').textContent =
-          user.email || ''
-
-      } catch {}
-
-    }
-
-
-    // Verificar sesión contra el backend
-    fetch(
-      window.location.origin + '/api/v1/account/profile',
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
-      .then((res) => {
-
-        if (res.status === 401) {
-
-          localStorage.removeItem('erp_token')
-          localStorage.removeItem('erp_user')
-
-          window.location.href = '/index.html'
-        }
-
-      })
-      .catch(() => {
-        // No hacemos nada por ahora
-      })
-
-
-    // Cerrar sesión
-    document
-      .getElementById('logout-btn')
-      .addEventListener('click', async () => {
-
-        try {
-
-          await fetch(
-            window.location.origin + '/api/v1/account/logout',
-            {
-              method: 'POST',
-
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          )
-
-        } catch {}
-
-        localStorage.removeItem('erp_token')
-        localStorage.removeItem('erp_user')
-
-        window.location.href = '/index.html'
-
-      })
-
-
-    // =====================================================
-    // NAVEGACIÓN VISUAL
-    // Por ahora NO cambia de página.
-    // =====================================================
-
-    const menuItems =
-      document.querySelectorAll('.menu-item')
-
-    menuItems.forEach((item) => {
-
-      item.addEventListener('click', () => {
-
-        menuItems.forEach((menu) => {
-          menu.classList.remove('active')
-        })
-
-        item.classList.add('active')
-
-      })
-
-    })
-    // =====================================================
-// SIDEBAR COLAPSABLE
-// =====================================================
-
-const appLayout = document.querySelector('.app-layout')
-const sidebarToggle = document.getElementById('sidebar-toggle')
-
-sidebarToggle.addEventListener('click', () => {
-
-  const collapsed =
-    appLayout.classList.toggle('sidebar-collapsed')
-
-  if (collapsed) {
-
-    sidebarToggle.textContent = '›'
-    sidebarToggle.setAttribute(
-      'aria-label',
-      'Expandir menú'
-    )
-    sidebarToggle.setAttribute(
-      'title',
-      'Expandir menú'
-    )
-
-  } else {
-
-    sidebarToggle.textContent = '‹'
-    sidebarToggle.setAttribute(
-      'aria-label',
-      'Contraer menú'
-    )
-    sidebarToggle.setAttribute(
-      'title',
-      'Contraer menú'
-    )
-
-  }
-
-})
-
-  </script>
+  <!-- JS DEL DASHBOARD -->
+  <script src="js/dashboard.js"></script>
 
 </body>
 
