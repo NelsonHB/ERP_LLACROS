@@ -1,0 +1,227 @@
+
+<!-- =========================================
+     EZCUDO360 - SIDEBAR COMPARTIDO
+========================================= -->
+
+<aside class="ez-sidebar" id="ezSidebar">
+
+  <!-- LOGOTIPO -->
+  <div class="ez-sidebar-brand">
+
+    <a
+      href="/dashboard.html"
+      class="ez-brand-link"
+      title="EZCUDO360"
+    >
+      <div class="ez-brand-icon">E</div>
+
+      <div class="ez-brand-text">
+        <strong>EZCUDO<span>360</span></strong>
+        <small>Gestión empresarial</small>
+      </div>
+    </a>
+
+    <!-- CONTRAER / EXPANDIR -->
+    <button
+      type="button"
+      class="ez-collapse-btn"
+      id="ezSidebarToggle"
+      title="Contraer menú"
+      aria-label="Contraer menú"
+      aria-expanded="true"
+      aria-controls="ezSidebarNav"
+    >
+      <span class="ez-collapse-arrow">❮</span>
+    </button>
+
+    <!-- CERRAR MENÚ EN MÓVIL -->
+    <button
+      type="button"
+      class="ez-mobile-close"
+      id="ezSidebarClose"
+      aria-label="Cerrar menú"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <!-- NAVEGACIÓN -->
+  <nav
+    class="ez-sidebar-nav"
+    id="ezSidebarNav"
+    aria-label="Menú principal"
+  >
+
+    <!-- =====================================
+         GENERAL
+    ====================================== -->
+    <div class="ez-nav-group">
+      <div class="ez-nav-label">GENERAL</div>
+
+      <a
+        href="/dashboard.html"
+        class="ez-nav-link"
+        data-page="dashboard.html"
+        title="Dashboard"
+      >
+        <span class="ez-nav-icon">⌂</span>
+        <span class="ez-nav-text">Dashboard</span>
+      </a>
+    </div>
+
+    <!-- =====================================
+         ABASTECIMIENTO
+    ====================================== -->
+    <div class="ez-nav-group">
+      <div class="ez-nav-label">ABASTECIMIENTO</div>
+
+      <!-- PROVEEDORES -->
+      <a
+        href="/suppliers.html"
+        class="ez-nav-link"
+        data-page="suppliers.html"
+        title="Proveedores"
+      >
+        <span class="ez-nav-icon">♙</span>
+        <span class="ez-nav-text">Proveedores</span>
+      </a>
+
+      <!-- PRODUCTOS POR PROVEEDOR -->
+      <a
+        href="/supplier-products.html"
+        class="ez-nav-link"
+        data-page="supplier-products.html"
+        title="Productos por proveedor"
+      >
+        <span class="ez-nav-icon">▦</span>
+        <span class="ez-nav-text">
+          Productos por proveedor
+        </span>
+      </a>
+
+      <!-- CATEGORÍAS DE PRODUCTOS -->
+      <a
+        href="/categories.html"
+        class="ez-nav-link"
+        data-page="categories.html"
+        title="Categorías"
+      >
+        <span class="ez-nav-icon">▥</span>
+        <span class="ez-nav-text">Categorías</span>
+      </a>
+
+      <!-- COMPRAS -->
+      <a
+        href="/purchases.html"
+        class="ez-nav-link"
+        data-page="purchases.html"
+        title="Compras"
+      >
+        <span class="ez-nav-icon">↓</span>
+        <span class="ez-nav-text">Compras</span>
+      </a>
+    </div>
+
+    <!-- =====================================
+         INVENTARIO
+    ====================================== -->
+    <div class="ez-nav-group">
+      <div class="ez-nav-label">INVENTARIO</div>
+
+      <a
+        href="/products.html"
+        class="ez-nav-link"
+        data-page="products.html"
+        title="Inventario"
+      >
+        <span class="ez-nav-icon">▤</span>
+        <span class="ez-nav-text">Inventario</span>
+      </a>
+    </div>
+
+    <!-- =====================================
+         VENTAS
+    ====================================== -->
+    <div class="ez-nav-group">
+      <div class="ez-nav-label">VENTAS</div>
+
+      <!-- PUNTO DE VENTA -->
+      <a
+        href="/pos.html"
+        class="ez-nav-link"
+        data-page="pos.html"
+        title="Punto de Venta"
+      >
+        <span class="ez-nav-icon">▣</span>
+        <span class="ez-nav-text">Punto de Venta</span>
+      </a>
+
+      <!-- HISTORIAL DE VENTAS -->
+      <a
+        href="/sales-history.html"
+        class="ez-nav-link"
+        data-page="sales-history.html"
+        title="Historial de ventas"
+      >
+        <span class="ez-nav-icon">◷</span>
+        <span class="ez-nav-text">Historial de ventas</span>
+      </a>
+
+      <!-- CLIENTES -->
+      <a
+        href="/customers.html"
+        class="ez-nav-link"
+        data-page="customers.html"
+        title="Clientes"
+      >
+        <span class="ez-nav-icon">♧</span>
+        <span class="ez-nav-text">Clientes</span>
+      </a>
+    </div>
+
+  </nav>
+
+  <!-- =====================================
+       CUENTA DEL USUARIO
+  ====================================== -->
+  <div class="ez-sidebar-footer">
+
+    <div class="ez-user-card">
+
+      <div
+        class="ez-user-avatar"
+        id="ezUserAvatar"
+        title="Usuario conectado"
+      >
+        U
+      </div>
+
+      <div class="ez-user-info">
+        <strong id="ezUserName">Usuario ERP</strong>
+        <small>Sesión activa</small>
+      </div>
+
+    </div>
+
+    <!-- CERRAR SESIÓN -->
+    <button
+      type="button"
+      class="ez-logout-btn"
+      id="ezLogoutBtn"
+      title="Cerrar sesión"
+    >
+      <span class="ez-logout-icon">↪</span>
+
+      <span class="ez-logout-text">
+        Cerrar sesión
+      </span>
+    </button>
+
+    <div class="ez-sidebar-version">
+      EZCUDO360 · ERP
+    </div>
+
+  </div>
+
+</aside>

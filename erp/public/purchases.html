@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compras | EZCUDO360</title>
+
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/purchases.css?v=1">
+
+  <script src="/js/sidebar.js" defer></script>
+  <script src="/js/purchases.js?v=1" defer></script>
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="purchases-main">
+      <header class="purchases-topbar">
+        <div>
+          <h1>Compras</h1>
+          <p>
+            Registra mercadería de tus proveedores
+            y controla la recepción de productos.
+          </p>
+        </div>
+
+        <button
+          class="buy-btn buy-btn-primary"
+          id="newPurchase"
+          type="button"
+        >
+          + Nueva compra
+        </button>
+      </header>
+
+      <div class="purchases-content">
+        <section class="buy-stats">
+          <article class="buy-stat">
+            <span class="buy-stat-icon">▣</span>
+            <div>
+              <small>Total de compras</small>
+              <strong id="totalPurchases">0</strong>
+            </div>
+          </article>
+
+          <article class="buy-stat">
+            <span class="buy-stat-icon buy-stat-green">✓</span>
+            <div>
+              <small>Compras recibidas</small>
+              <strong id="receivedPurchases">0</strong>
+            </div>
+          </article>
+
+          <article class="buy-stat">
+            <span class="buy-stat-icon buy-stat-orange">◷</span>
+            <div>
+              <small>Pendientes de recepción</small>
+              <strong id="draftPurchases">0</strong>
+            </div>
+          </article>
+
+          <article class="buy-stat">
+            <span class="buy-stat-icon buy-stat-blue">S/</span>
+            <div>
+              <small>Monto recibido</small>
+              <strong id="receivedAmount">S/ 0.00</strong>
+            </div>
+          </article>
+        </section>
+
+        <section class="buy-panel">
+          <div class="buy-panel-header">
+            <div>
+              <h2>Historial de compras</h2>
+              <p>
+                Revisa los detalles y recibe borradores pendientes.
+              </p>
+            </div>
+
+            <button
+              class="buy-btn buy-btn-outline"
+              id="refreshPurchases"
+              type="button"
+            >
+              ↻ Actualizar
+            </button>
+          </div>
+
+          <div class="buy-filter-row">
+            <input
+              id="searchPurchases"
+              type="search"
+              placeholder="Buscar por número, documento o proveedor..."
+            >
+
+            <select id="filterPurchaseStatus">
+              <option value="all">Todos los estados</option>
+              <option value="BORRADOR">Borrador</option>
+              <option value="RECIBIDA">Recibida</option>
+              <option value="ANULADA">Anulada</option>
+            </select>
+
+            <input
+              id="filterPurchaseMonth"
+              type="month"
+              aria-label="Filtrar compras por mes"
+            >
+          </div>
+
+          <div class="buy-table-wrap">
+            <table class="buy-table">
+              <thead>
+                <tr>
+                  <th>N.º compra</th>
+                  <th>Fecha</th>
+                  <th>Proveedor</th>
+                  <th>Documento</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody id="purchasesTable">
+                <tr>
+                  <td colspan="7" class="buy-empty">
+                    Cargando compras...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="purchaseCount" class="buy-table-footer">
+            Mostrando 0 compras
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: NUEVA COMPRA -->
+  <div class="buy-overlay buy-hidden" id="purchaseModal">
+    <section
+      class="buy-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="purchaseModalTitle"
+    >
+      <div class="buy-modal-header">
+        <div>
+          <h2 id="purchaseModalTitle">Registrar compra</h2>
+          <p>
+            Selecciona un proveedor y agrega los productos recibidos.
+          </p>
+        </div>
+
+        <button
+          class="buy-close"
+          id="closePurchase"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="purchaseForm" novalidate>
+        <div class="buy-modal-body">
+          <div
+            id="purchaseFormError"
+            class="buy-banner buy-hidden"
+            role="alert"
+          ></div>
+
+          <div class="buy-form-grid">
+            <div class="buy-field buy-span-2">
+              <label for="purchaseSupplier">
+                Proveedor <em>*</em>
+              </label>
+
+              <select id="purchaseSupplier" required>
+                <option value="">Cargando proveedores...</option>
+              </select>
+            </div>
+
+            <div class="buy-field">
+              <label for="purchaseDocType">
+                Tipo de documento
+              </label>
+
+              <select id="purchaseDocType">
+                <option value="">Sin documento</option>
+                <option value="FACTURA">Factura</option>
+                <option value="BOLETA">Boleta</option>
+                <option value="GUIA">Guía</option>
+                <option value="OTRO">Otro</option>
+              </select>
+            </div>
+
+            <div class="buy-field">
+              <label for="purchaseDocNumber">
+                Número de documento
+              </label>
+
+              <input
+                id="purchaseDocNumber"
+                maxlength="50"
+                placeholder="Ej. F001-0000123"
+              >
+            </div>
+          </div>
+
+          <div class="buy-catalog-head">
+            <div>
+              <h3>Productos del proveedor</h3>
+              <p>
+                Solo aparecen productos activos asociados
+                al proveedor seleccionado.
+              </p>
+            </div>
+          </div>
+
+          <input
+            class="buy-catalog-search"
+            id="catalogSearch"
+            type="search"
+            placeholder="Buscar por nombre, marca, categoría o código..."
+          >
+
+          <div id="purchaseCatalog" class="buy-catalog">
+            <div class="buy-empty">
+              Selecciona un proveedor para mostrar sus productos.
+            </div>
+          </div>
+
+          <div class="buy-items-head">
+            <div>
+              <h3>Productos seleccionados</h3>
+              <p>
+                Indica cantidad y costo unitario por cada producto.
+              </p>
+            </div>
+
+            <span class="buy-items-count" id="itemsCount">
+              0 productos
+            </span>
+          </div>
+
+          <div class="buy-table-wrap buy-lines-wrap">
+            <table class="buy-table buy-lines-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Costo unitario (S/)</th>
+                  <th>Subtotal (S/)</th>
+                  <th></th>
+                </tr>
+              </thead>
+
+              <tbody id="purchaseLines">
+                <tr>
+                  <td colspan="5" class="buy-empty">
+                    Aún no hay productos seleccionados.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="buy-bottom-grid">
+            <div class="buy-field">
+              <label for="purchaseNotes">
+                Observaciones
+              </label>
+
+              <textarea
+                id="purchaseNotes"
+                rows="3"
+                maxlength="5000"
+                placeholder="Notas sobre la compra o recepción (opcional)"
+              ></textarea>
+            </div>
+
+            <div class="buy-totals">
+              <div>
+                <span>Subtotal</span>
+                <strong id="purchaseSubtotal">
+                  S/ 0.00
+                </strong>
+              </div>
+
+              <div>
+                <span>Impuesto desglosado</span>
+                <strong>S/ 0.00</strong>
+              </div>
+
+              <div class="buy-grand-total">
+                <span>Total de compra</span>
+                <strong id="purchaseTotal">
+                  S/ 0.00
+                </strong>
+              </div>
+
+              <small>
+                Los costos ingresados se toman como importes finales,
+                sin IGV adicional.
+              </small>
+            </div>
+          </div>
+
+          <div class="buy-hint">
+            Guardar borrador <strong>no modifica el stock</strong>.
+            Registrar y recibir añade las cantidades al inventario
+            y crea movimientos de entrada.
+          </div>
+        </div>
+
+        <div class="buy-modal-footer">
+          <button
+            class="buy-btn buy-btn-outline"
+            type="button"
+            id="cancelPurchaseForm"
+          >
+            Cancelar
+          </button>
+
+          <button
+            class="buy-btn buy-btn-outline"
+            type="button"
+            id="saveDraft"
+          >
+            Guardar borrador
+          </button>
+
+          <button
+            class="buy-btn buy-btn-primary"
+            type="submit"
+            id="saveReceived"
+          >
+            Registrar y recibir compra
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- MODAL: DETALLE DE COMPRA -->
+  <div class="buy-overlay buy-hidden" id="detailModal">
+    <section
+      class="buy-modal buy-modal-detail"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="detailTitle"
+    >
+      <div class="buy-modal-header">
+        <div>
+          <h2 id="detailTitle">Detalle de compra</h2>
+          <p id="detailSubtitle">
+            Información registrada
+          </p>
+        </div>
+
+        <button
+          class="buy-close"
+          id="closeDetail"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+      </div>
+
+      <div id="detailBody" class="buy-modal-body"></div>
+
+      <div class="buy-modal-footer">
+        <button
+          class="buy-btn buy-btn-outline"
+          id="closeDetailBottom"
+          type="button"
+        >
+          Cerrar
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div
+    class="buy-toast buy-hidden"
+    id="purchaseToast"
+    role="status"
+    aria-live="polite"
+  ></div>
+</body>
+</html>

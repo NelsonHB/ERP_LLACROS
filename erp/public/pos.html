@@ -1,787 +1,418 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>ERP · Ventas y POS</title>
+  <title>Punto de Venta | EZCUDO360</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/pos.css?v=4">
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <!-- CSS general del ERP -->
-  <link rel="stylesheet" href="css/global.css">
-
-  <!-- CSS exclusivo del POS -->
-  <link rel="stylesheet" href="css/pos.css">
+  <script src="/js/sidebar.js" defer></script>
+  <script src="/js/pos.js?v=4" defer></script>
 </head>
 
 <body>
-
   <div class="app-layout">
 
-    <!-- =====================================================
-         SIDEBAR
-         ===================================================== -->
+    <!-- SIDEBAR COMPARTIDO -->
+    <div id="sidebar-container"></div>
 
-    <aside class="sidebar" id="sidebar">
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="pos-main">
 
-      <div class="sidebar-brand">
-
-        <div class="sidebar-logo">
-          E
+      <header class="pos-header">
+        <div>
+          <h1>Punto de Venta</h1>
+          <p>Registra ventas y administra tu carrito.</p>
         </div>
 
-        <div class="sidebar-brand-text">
-          <strong>ERP</strong>
-          <span>Grupo Llacros</span>
-        </div>
-
-        <button
-          class="sidebar-toggle"
-          id="sidebar-toggle"
-          type="button"
-          title="Contraer menú"
-          aria-label="Contraer menú"
-        >
-          ‹
-        </button>
-
-      </div>
-
-
-      <nav class="sidebar-menu">
-
-        <!-- PRINCIPAL -->
-
-        <div class="menu-section-title">
-          PRINCIPAL
-        </div>
-
-        <button
-          class="menu-item"
-          id="dashboard-button"
-          type="button"
-        >
-          <span class="menu-icon">
-            <svg viewBox="0 0 24 24">
-              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-            </svg>
+        <div class="pos-header-actions">
+          <span class="pos-status">
+            Caja operativa
           </span>
 
-          <span>Dashboard</span>
-        </button>
-
-
-        <!-- VENTAS -->
-
-        <div class="menu-section-title">
-          VENTAS
-        </div>
-
-        <button
-          class="menu-item active"
-          type="button"
-        >
-          <span class="menu-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M3 3h2l2.5 11h10l2-7H7"></path>
-              <circle cx="10" cy="19" r="1"></circle>
-              <circle cx="18" cy="19" r="1"></circle>
-            </svg>
-          </span>
-
-          <span>Punto de venta</span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          id="sales-history-button"
-          type="button"
-        >
-          <span class="menu-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M3 3v18h18"></path>
-              <path d="m7 16 4-5 3 3 5-7"></path>
-            </svg>
-          </span>
-
-          <span>Historial de ventas</span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          id="customers-button"
-          type="button"
-        >
-          <span class="menu-icon">
-            <svg viewBox="0 0 24 24">
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M2 21v-2a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v2"></path>
-            </svg>
-          </span>
-
-          <span>Clientes</span>
-        </button>
-
-
-        <!-- GESTIÓN -->
-
-        <div class="menu-section-title">
-          GESTIÓN
-        </div>
-
-        <button class="menu-item" type="button">
-
-          <span class="menu-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path>
-              <path d="M3 7.5 12 12l9-4.5"></path>
-              <path d="M12 12v9"></path>
-            </svg>
-          </span>
-
-          <span>Inventario</span>
-
-        </button>
-
-
-        <button class="menu-item" type="button">
-
-          <span class="menu-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M3 10 12 4l9 6"></path>
-              <path d="M5 9v11h14V9"></path>
-              <path d="M8 20v-6h8v6"></path>
-            </svg>
-          </span>
-
-          <span>Almacenes</span>
-
-        </button>
-
-      </nav>
-
-
-      <div class="sidebar-bottom">
-
-        <div class="sidebar-company">
-
-          <span class="company-indicator"></span>
-
-          <div>
-            <strong>Empresa activa</strong>
-            <small>Grupo Llacros</small>
-          </div>
-
-        </div>
-
-      </div>
-
-    </aside>
-
-
-    <!-- =====================================================
-         CONTENIDO PRINCIPAL
-         ===================================================== -->
-
-    <div class="main-area">
-
-      <!-- TOPBAR -->
-
-      <header class="topbar">
-
-        <div class="topbar-left">
-
-          <h1>
-            Punto de venta
-          </h1>
-
-          <p>
-            Registra y administra las ventas de la empresa
-          </p>
-
-        </div>
-
-
-        <div class="session">
-
-          <div class="session-info">
-
-            <div
-              class="name"
-              id="user-name"
-            >
-              Usuario
-            </div>
-
-            <div class="meta">
-
-              <span class="dot"></span>
-
-              <span id="user-email">
-                Sesión activa
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <button
-            class="logout-btn"
-            id="logout-btn"
-            type="button"
+          <a
+            href="/sales-history.html"
+            class="pos-link"
           >
-            Cerrar sesión
-          </button>
-
+            Historial de ventas
+          </a>
         </div>
-
       </header>
 
+      <div class="pos-content">
 
-      <!-- =================================================
-           POS
-           ================================================= -->
+        <!-- =====================================
+             CATÁLOGO DE PRODUCTOS
+        ====================================== -->
+        <section class="pos-catalog">
 
-      <main class="pos-content">
+          <div class="pos-section-header">
+            <div>
+              <h2>Productos</h2>
+              <p>Selecciona los artículos para la venta.</p>
+            </div>
 
-        <!-- ENCABEZADO -->
-
-        <section class="pos-heading">
-
-          <div>
-
-            <span class="eyebrow">
-              VENTAS
-            </span>
-
-            <h2>
-              Nueva venta
-            </h2>
-
-            <p>
-              Selecciona productos y genera una nueva venta.
-            </p>
-
+            <button
+              id="refreshProducts"
+              class="pos-btn"
+              type="button"
+            >
+              ↻ Actualizar
+            </button>
           </div>
 
+          <div class="pos-search-box">
+            <input
+              type="search"
+              id="searchProducts"
+              placeholder="Buscar por nombre, código o marca..."
+              autocomplete="off"
+            >
+          </div>
 
-          <div class="sale-number">
-
-            <span>
-              Venta
-            </span>
-
-            <strong>
-              #000001
-            </strong>
-
+          <div id="productGrid" class="product-grid">
+            <p class="pos-empty">
+              Cargando productos...
+            </p>
           </div>
 
         </section>
 
+        <!-- =====================================
+             CARRITO DE VENTA
+        ====================================== -->
+        <aside class="pos-cart">
 
-        <!-- =================================================
-             LAYOUT POS
-             ================================================= -->
-
-        <div class="pos-layout">
-
-
-          <!-- ===============================================
-               PRODUCTOS
-               =============================================== -->
-
-          <section class="products-section">
-
-            <!-- BUSCADOR -->
-
-            <div class="search-panel">
-
-              <div class="search-box">
-
-                <svg viewBox="0 0 24 24">
-                  <circle cx="11" cy="11" r="7"></circle>
-                  <path d="m20 20-4-4"></path>
-                </svg>
-
-                <input
-                  id="search-product"
-                  type="text"
-                  placeholder="Buscar producto por nombre o código..."
-                  autocomplete="off"
-                >
-
-              </div>
-
-
-              <!-- CATEGORÍAS -->
-
-              <div class="categories">
-
-                <button
-                  class="category active"
-                  data-category="Todos"
-                  type="button"
-                >
-                  Todos
-                </button>
-
-                <button
-                  class="category"
-                  data-category="Laptops"
-                  type="button"
-                >
-                  Laptops
-                </button>
-
-                <button
-                  class="category"
-                  data-category="Periféricos"
-                  type="button"
-                >
-                  Periféricos
-                </button>
-
-                <button
-                  class="category"
-                  data-category="Componentes"
-                  type="button"
-                >
-                  Componentes
-                </button>
-
-                <button
-                  class="category"
-                  data-category="Accesorios"
-                  type="button"
-                >
-                  Accesorios
-                </button>
-
-              </div>
-
+          <div class="pos-cart-header">
+            <div>
+              <h2>Carrito de venta</h2>
+              <p id="cartCount">0 productos</p>
             </div>
 
+            <button
+              id="clearCart"
+              class="pos-btn pos-btn-danger"
+              type="button"
+            >
+              Vaciar
+            </button>
+          </div>
 
-            <!-- TÍTULO PRODUCTOS -->
+          <div id="cartItems" class="cart-items">
+            <p class="pos-empty">
+              El carrito está vacío.
+            </p>
+          </div>
 
-            <div class="products-header">
+          <div class="pos-checkout">
 
-              <div>
+            <!-- DESCUENTO OPCIONAL -->
+            <div class="pos-discount-box">
 
-                <h3>
-                  Productos
-                </h3>
-
-                <p id="product-count">
-                  0 productos disponibles
-                </p>
-
-              </div>
-
-            </div>
-
-
-            <!-- LOS PRODUCTOS LOS CREA POS.JS -->
-
-            <div
-              class="products-grid"
-              id="products-grid"
-            ></div>
-
-          </section>
-
-
-          <!-- ===============================================
-               CARRITO
-               =============================================== -->
-
-          <aside class="cart-panel">
-
-            <div class="cart-header">
-
-              <div>
-
-                <h3>
-                  Detalle de venta
-                </h3>
-
-                <span id="cart-count">
-                  0 productos
-                </span>
-
-              </div>
-
-
-              <button
-                class="clear-cart"
-                id="clear-cart"
-                type="button"
+              <label
+                for="enableDiscount"
+                class="pos-checkbox-label"
               >
-                Limpiar
-              </button>
-
-            </div>
-
-
-            <!-- CLIENTE -->
-
-            <div class="customer-section">
-
-              <label for="customer">
-                Cliente
+                <input
+                  type="checkbox"
+                  id="enableDiscount"
+                >
+                <span>Aplicar descuento</span>
               </label>
 
-              <select id="customer">
+              <div
+                id="discountSection"
+                class="pos-field pos-hidden"
+              >
+                <label for="discountAmount">
+                  Descuento (S/)
+                </label>
 
-                <option value="general">
-                  Cliente general
+                <input
+                  id="discountAmount"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="0"
+                  placeholder="0.00"
+                >
+
+                <small>
+                  Descuento fijo sobre el total de productos.
+                </small>
+              </div>
+            </div>
+
+            <!-- TOTALES -->
+            <div class="pos-totals">
+
+              <div>
+                <span>Productos</span>
+                <strong id="cartSubtotal">
+                  S/ 0.00
+                </strong>
+              </div>
+
+              <div>
+                <span>Descuento</span>
+                <strong id="cartDiscount">
+                  - S/ 0.00
+                </strong>
+              </div>
+
+              <div>
+                <span>IGV incluido (18 %)</span>
+                <strong id="cartIgv">
+                  S/ 0.00
+                </strong>
+              </div>
+
+              <div class="pos-total-final">
+                <span>Total a pagar</span>
+                <strong id="cartTotal">
+                  S/ 0.00
+                </strong>
+              </div>
+
+            </div>
+
+            <!-- =====================================
+                 IDENTIFICACIÓN DEL CLIENTE
+            ====================================== -->
+            <div class="pos-customer-box">
+
+              <div class="pos-customer-heading">
+                <h3>Datos del cliente</h3>
+                <p>
+                  Ingresa el DNI o RUC para buscar al cliente.
+                </p>
+              </div>
+
+              <div class="pos-field">
+                <label for="customerDocumentType">
+                  Tipo de documento
+                </label>
+
+                <select id="customerDocumentType">
+                  <option value="DNI">DNI</option>
+                  <option value="RUC">RUC</option>
+                </select>
+              </div>
+
+              <div class="pos-field">
+                <label for="customerDocumentNumber">
+                  Número de documento
+                </label>
+
+                <input
+                  id="customerDocumentNumber"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  maxlength="8"
+                  placeholder="Ingresa los 8 dígitos"
+                >
+              </div>
+
+              <!-- NOMBRE AUTOMÁTICO DEL CLIENTE -->
+              <div class="pos-field pos-customer-name-field">
+                <label for="customerName">
+                  Nombre del cliente / Razón social
+                </label>
+
+                <input
+                  id="customerName"
+                  type="text"
+                  placeholder="Se completará automáticamente"
+                  readonly
+                  aria-readonly="true"
+                >
+              </div>
+
+              <!-- ESTADO DE BÚSQUEDA -->
+              <div
+                id="customerLookupResult"
+                class="pos-customer-result"
+                role="status"
+                aria-live="polite"
+              >
+                Ingresa el documento para buscar al cliente.
+              </div>
+
+              <a
+                href="/customers.html"
+                class="pos-link pos-customer-link"
+              >
+                + Registrar nuevo cliente
+              </a>
+
+            </div>
+
+            <!-- =====================================
+                 MÉTODO DE PAGO
+            ====================================== -->
+            <div class="pos-field">
+
+              <label for="paymentMethod">
+                Método de pago
+              </label>
+
+              <select id="paymentMethod">
+                <option value="EFECTIVO">
+                  Efectivo
                 </option>
 
-                <option value="1">
-                  Juan Pérez
+                <option value="YAPE">
+                  Yape
                 </option>
 
-                <option value="2">
-                  María Torres
+                <option value="PLIN">
+                  Plin
                 </option>
 
-                <option value="3">
-                  Empresa Demo S.A.C.
+                <option value="TARJETA">
+                  Tarjeta
                 </option>
 
+                <option value="TRANSFERENCIA">
+                  Transferencia
+                </option>
               </select>
 
             </div>
 
-
-            <!-- ITEMS -->
-
+            <!-- MONTO RECIBIDO -->
             <div
-              class="cart-items"
-              id="cart-items"
+              id="cashSection"
+              class="pos-field"
             >
+              <label for="cashReceived">
+                Monto recibido (S/)
+              </label>
 
-              <div class="empty-cart">
-
-                <div class="empty-cart-icon">
-
-                  <svg viewBox="0 0 24 24">
-                    <path d="M3 3h2l2.5 11h10l2-7H7"></path>
-                    <circle cx="10" cy="19" r="1"></circle>
-                    <circle cx="18" cy="19" r="1"></circle>
-                  </svg>
-
-                </div>
-
-                <strong>
-                  Carrito vacío
-                </strong>
-
-                <p>
-                  Selecciona productos para comenzar una venta.
-                </p>
-
-              </div>
-
+              <input
+                id="cashReceived"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+              >
             </div>
 
+            <!-- VUELTO -->
+            <div
+              id="changeSection"
+              class="pos-change"
+            >
+              <span>Vuelto</span>
 
-            <!-- RESUMEN -->
-
-            <div class="cart-summary">
-
-              <div>
-
-                <span>
-                  Subtotal
-                </span>
-
-                <strong id="subtotal">
-                  S/ 0.00
-                </strong>
-
-              </div>
-
-
-              <div>
-
-                <span>
-                  IGV (18%)
-                </span>
-
-                <strong id="igv">
-                  S/ 0.00
-                </strong>
-
-              </div>
-
-
-              <div class="total-row">
-
-                <span>
-                  Total
-                </span>
-
-                <strong id="total">
-                  S/ 0.00
-                </strong>
-
-              </div>
-
+              <strong id="cashChange">
+                S/ 0.00
+              </strong>
             </div>
 
-
-            <!-- COBRAR -->
-
+            <!-- CONFIRMAR VENTA -->
             <button
-              class="checkout-btn"
-              id="checkout-btn"
+              id="completeSale"
+              class="pos-btn-primary"
               type="button"
               disabled
             >
-
-              <span>
-                Cobrar
-              </span>
-
-              <span id="checkout-total">
-                S/ 0.00
-              </span>
-
+              Confirmar venta
             </button>
 
-          </aside>
+            <p class="pos-note">
+              El cliente, los precios y el stock
+              se validan nuevamente antes de guardar la venta.
+            </p>
 
-        </div>
+          </div>
+        </aside>
 
-      </main>
-
-    </div>
-
+      </div>
+    </main>
   </div>
 
-
-  <!-- =====================================================
-       MODAL DE PAGO
-       ===================================================== -->
-
+  <!-- =====================================
+       NOTIFICACIONES
+  ====================================== -->
   <div
-    class="modal-overlay"
-    id="payment-modal"
+    id="posToast"
+    class="pos-toast pos-hidden"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+  <!-- =====================================
+       COMPROBANTE INTERNO
+  ====================================== -->
+  <div
+    id="receiptModal"
+    class="pos-overlay pos-hidden"
   >
+    <div
+      class="receipt-box"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="receiptTitle"
+    >
 
-    <div class="payment-modal">
-
-      <!-- HEADER -->
-
-      <div class="modal-header">
-
-        <div>
-
-          <span class="eyebrow">
-            FINALIZAR VENTA
-          </span>
-
-          <h2>
-            Registrar pago
-          </h2>
-
-        </div>
-
+      <div class="receipt-heading">
+        <h2 id="receiptTitle">
+          Venta registrada
+        </h2>
 
         <button
-          id="close-modal"
-          class="modal-close"
+          id="closeReceipt"
           type="button"
+          aria-label="Cerrar"
         >
           ×
         </button>
-
       </div>
 
+      <div class="receipt-business">
+        <strong>EZCUDO360</strong>
 
-      <!-- TOTAL -->
-
-      <div class="payment-total">
-
-        <span>
-          Total a pagar
-        </span>
-
-        <strong id="modal-total">
-          S/ 0.00
-        </strong>
-
+        <small>
+          Comprobante interno de venta
+        </small>
       </div>
 
+      <div id="receiptContent"></div>
 
-      <!-- COMPROBANTE -->
+      <p class="receipt-disclaimer">
+        Documento interno. No reemplaza una
+        boleta o factura electrónica de SUNAT.
+      </p>
 
-      <div class="form-group">
-
-        <label for="document-type">
-          Tipo de comprobante
-        </label>
-
-        <select id="document-type">
-
-          <option value="Boleta">
-            Boleta
-          </option>
-
-          <option value="Factura">
-            Factura
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <!-- MÉTODO DE PAGO -->
-
-      <div class="form-group">
-
-        <label>
-          Método de pago
-        </label>
-
-        <div class="payment-methods">
-
-          <button
-            class="payment-method active"
-            data-method="Efectivo"
-            type="button"
-          >
-            Efectivo
-          </button>
-
-          <button
-            class="payment-method"
-            data-method="Tarjeta"
-            type="button"
-          >
-            Tarjeta
-          </button>
-
-          <button
-            class="payment-method"
-            data-method="Yape"
-            type="button"
-          >
-            Yape
-          </button>
-
-          <button
-            class="payment-method"
-            data-method="Plin"
-            type="button"
-          >
-            Plin
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- EFECTIVO -->
-
-      <div
-        class="form-group"
-        id="cash-container"
-      >
-
-        <label for="cash-received">
-          Monto recibido
-        </label>
-
-        <input
-          id="cash-received"
-          type="number"
-          min="0"
-          step="0.10"
-          placeholder="S/ 0.00"
-        >
-
-      </div>
-
-
-      <!-- VUELTO -->
-
-      <div class="change-row">
-
-        <span>
-          Vuelto
-        </span>
-
-        <strong id="change">
-          S/ 0.00
-        </strong>
-
-      </div>
-
-
-      <!-- BOTONES -->
-
-      <div class="modal-actions">
+      <div class="receipt-actions">
 
         <button
-          class="cancel-btn"
-          id="cancel-payment"
+          id="printReceipt"
           type="button"
+          class="pos-btn"
         >
-          Cancelar
+          Imprimir
         </button>
 
         <button
-          class="confirm-btn"
-          id="confirm-payment"
+          id="finishReceipt"
           type="button"
+          class="pos-btn-primary"
         >
-          Confirmar venta
+          Finalizar
         </button>
 
       </div>
 
     </div>
-
   </div>
-
-
-  <!-- =====================================================
-       NOTIFICACIÓN
-       ===================================================== -->
-
-  <div
-    class="toast"
-    id="toast"
-  >
-    Venta registrada correctamente
-  </div>
-
-
-  <!-- =====================================================
-       JAVASCRIPT EXTERNO
-       ===================================================== -->
-
-  <script src="js/pos.js"></script>
 
 </body>
-
 </html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proveedores | EZCUDO360</title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/suppliers.css?v=8">
+  <script src="/js/sidebar.js" defer></script>
+  <script src="/js/suppliers.js?v=8" defer></script>
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="suppliers-main">
+      <!-- TOPBAR ORIGINAL -->
+      <header class="suppliers-topbar">
+        <div>
+          <h1>Proveedores</h1>
+          <p>Administración y gestión de proveedores</p>
+        </div>
+        <button type="button" id="newSupplier" class="sup-btn sup-btn-primary">
+          + Nuevo proveedor
+        </button>
+      </header>
+
+      <div class="suppliers-content">
+        <!-- ESTADÍSTICAS ORIGINALES -->
+        <section class="suppliers-stats" aria-label="Resumen de proveedores">
+          <article class="sup-stat-card">
+            <div class="sup-stat-icon" aria-hidden="true">▣</div>
+            <div><span>Total de proveedores</span><strong id="totalSuppliers">0</strong></div>
+          </article>
+          <article class="sup-stat-card">
+            <div class="sup-stat-icon sup-icon-green" aria-hidden="true">✓</div>
+            <div><span>Proveedores activos</span><strong id="activeSuppliers">0</strong></div>
+          </article>
+          <article class="sup-stat-card">
+            <div class="sup-stat-icon sup-icon-red" aria-hidden="true">×</div>
+            <div><span>Proveedores inactivos</span><strong id="inactiveSuppliers">0</strong></div>
+          </article>
+        </section>
+
+        <!-- PANEL ORIGINAL -->
+        <section class="suppliers-panel">
+          <div class="sup-panel-heading">
+            <div>
+              <h2>Lista de proveedores</h2>
+              <p>Consulta, registra y actualiza los proveedores de tu empresa.</p>
+            </div>
+            <button type="button" id="refreshSuppliers" class="sup-btn sup-btn-outline">Actualizar</button>
+          </div>
+
+          <div class="suppliers-filters">
+            <div class="sup-search">
+              <input type="search" id="searchSupplier"
+                     placeholder="Buscar por RUC, DNI, razón social o contacto..."
+                     aria-label="Buscar proveedor" autocomplete="off">
+            </div>
+            <select id="filterStatus" aria-label="Filtrar por estado">
+              <option value="all">Todos los estados</option>
+              <option value="active">Activos</option>
+              <option value="inactive">Inactivos</option>
+            </select>
+          </div>
+
+          <div class="sup-table-container">
+            <table class="sup-table">
+              <thead>
+                <tr>
+                  <th>Proveedor</th><th>Documento</th><th>Contacto</th>
+                  <th>Teléfono</th><th>Correo</th><th>Estado</th><th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="suppliersTable">
+                <tr><td class="sup-empty" colspan="7">Cargando proveedores...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sup-table-footer" id="supplierCount">Mostrando 0 proveedores</div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- FORMULARIO EN VENTANA MODAL, MISMO DISEÑO -->
+  <div class="sup-modal-overlay sup-hidden" id="supplierModal">
+    <section class="sup-modal" role="dialog" aria-modal="true"
+             aria-labelledby="supplierModalTitle">
+      <div class="sup-modal-header">
+        <div>
+          <h2 id="supplierModalTitle">Nuevo proveedor</h2>
+          <p>Completa los datos del proveedor. Los campos con * son obligatorios.</p>
+        </div>
+        <button type="button" id="closeSupplierModal" class="sup-modal-close"
+                aria-label="Cerrar formulario">×</button>
+      </div>
+
+      <form id="supplierForm" novalidate>
+        <div class="sup-form-grid">
+          <div class="sup-field sup-full">
+            <label for="supplierBusinessName">Razón social / Nombre completo <span class="sup-required">*</span></label>
+            <input id="supplierBusinessName" type="text" maxlength="150"
+                   placeholder="Ej. Distribuidora Tecnológica S.A.C." autocomplete="organization" required>
+            <small class="sup-field-error" data-error-for="businessName"></small>
+          </div>
+
+          <div class="sup-field sup-full">
+            <label for="supplierTradeName">Nombre comercial</label>
+            <input id="supplierTradeName" type="text" maxlength="150" placeholder="Ej. Distribuidora Tech">
+            <small class="sup-field-error" data-error-for="tradeName"></small>
+          </div>
+
+          <div class="sup-field">
+            <label for="supplierDocumentType">Tipo de documento <span class="sup-required">*</span></label>
+            <select id="supplierDocumentType" required>
+              <option value="RUC">RUC</option><option value="DNI">DNI</option>
+            </select>
+            <small class="sup-field-error" data-error-for="documentType"></small>
+          </div>
+
+          <div class="sup-field">
+            <label for="supplierDocumentNumber">Número de documento <span class="sup-required">*</span></label>
+            <input id="supplierDocumentNumber" type="text" inputmode="numeric"
+                   maxlength="11" pattern="[0-9]*" autocomplete="off" required placeholder="11 dígitos">
+            <small class="sup-field-help" id="documentHelp">El RUC debe tener exactamente 11 números.</small>
+            <small class="sup-field-error" data-error-for="documentNumber"></small>
+          </div>
+
+          <div class="sup-field sup-full">
+            <label for="supplierContactName">Persona de contacto</label>
+            <input id="supplierContactName" type="text" maxlength="120"
+                   placeholder="Ej. María Rodríguez" autocomplete="name">
+            <small class="sup-field-error" data-error-for="contactName"></small>
+          </div>
+
+          <div class="sup-field">
+            <label for="supplierPhone">Teléfono</label>
+            <input id="supplierPhone" type="text" inputmode="numeric" maxlength="9"
+                   pattern="[0-9]*" placeholder="Máximo 9 dígitos" autocomplete="tel">
+            <small class="sup-field-error" data-error-for="phone"></small>
+          </div>
+
+          <div class="sup-field">
+            <label for="supplierEmail">Correo electrónico</label>
+            <input id="supplierEmail" type="email" maxlength="150" placeholder="ventas@empresa.com" autocomplete="email">
+            <small class="sup-field-error" data-error-for="email"></small>
+          </div>
+
+          <div class="sup-field sup-full">
+            <label for="supplierAddress">Dirección</label>
+            <textarea id="supplierAddress" rows="2" placeholder="Dirección completa, sin límite adicional"></textarea>
+          </div>
+
+          <div class="sup-field sup-full">
+            <label for="supplierNotes">Observaciones</label>
+            <textarea id="supplierNotes" rows="3" placeholder="Notas o información adicional, sin límite adicional"></textarea>
+          </div>
+
+          <div class="sup-field sup-full">
+            <label for="supplierActive">Estado</label>
+            <select id="supplierActive">
+              <option value="true">Activo</option><option value="false">Inactivo</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="supplierFormError" class="sup-form-error sup-hidden" role="alert"></div>
+        <div class="sup-modal-actions">
+          <button type="button" id="cancelSupplier" class="sup-btn sup-btn-outline">Cancelar</button>
+          <button type="submit" id="saveSupplier" class="sup-btn sup-btn-primary">Guardar proveedor</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div id="supplierToast" class="sup-toast sup-hidden" role="status" aria-live="polite"></div>
+</body>
+</html>

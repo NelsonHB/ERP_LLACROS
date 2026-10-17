@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categorías | EZCUDO360</title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/categories.css?v=1">
+  <script src="/js/sidebar.js" defer></script>
+  <script src="/js/categories.js?v=1" defer></script>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- No duplicar el sidebar: usa el compartido. -->
+    <div id="sidebar-container"></div>
+
+    <main class="categories-main">
+      <header class="categories-topbar">
+        <div>
+          <h1>Categorías</h1>
+          <p>Organización y clasificación de los productos</p>
+        </div>
+        <button type="button" id="newCategory" class="sup-btn sup-btn-primary">
+          + Nueva categoría
+        </button>
+      </header>
+
+      <div class="categories-content">
+        <section class="categories-stats" aria-label="Resumen de categorías">
+          <article class="sup-stat-card">
+            <div class="sup-stat-icon" aria-hidden="true">▣</div>
+            <div><span>Total de categorías</span><strong id="totalCategories">0</strong></div>
+          </article>
+          <article class="sup-stat-card">
+            <div class="sup-stat-icon sup-icon-green" aria-hidden="true">✓</div>
+            <div><span>Categorías activas</span><strong id="activeCategories">0</strong></div>
+          </article>
+          <article class="sup-stat-card">
+            <div class="sup-stat-icon sup-icon-red" aria-hidden="true">×</div>
+            <div><span>Categorías inactivas</span><strong id="inactiveCategories">0</strong></div>
+          </article>
+        </section>
+
+        <section class="categories-panel">
+          <div class="sup-panel-heading">
+            <div>
+              <h2>Lista de categorías</h2>
+              <p>Consulta, registra y edita las categorías de tu catálogo.</p>
+            </div>
+            <button type="button" id="refreshCategories" class="sup-btn sup-btn-outline">
+              Actualizar
+            </button>
+          </div>
+
+          <div class="categories-filters">
+            <div class="sup-search">
+              <input type="search" id="searchCategory" autocomplete="off"
+                     placeholder="Buscar por nombre o descripción..." aria-label="Buscar categoría">
+            </div>
+            <select id="filterCategoryStatus" aria-label="Filtrar categorías por estado">
+              <option value="all">Todos los estados</option>
+              <option value="active">Activas</option>
+              <option value="inactive">Inactivas</option>
+            </select>
+          </div>
+
+          <div class="sup-table-container">
+            <table class="sup-table">
+              <thead>
+                <tr>
+                  <th>Categoría</th>
+                  <th>Descripción</th>
+                  <th>Productos asociados</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="categoriesTable">
+                <tr><td class="sup-empty" colspan="5">Cargando categorías...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sup-table-footer" id="categoryCount">Mostrando 0 categorías</div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- VENTANA EMERGENTE, MISMO DISEÑO QUE PROVEEDORES -->
+  <div class="sup-modal-overlay sup-hidden" id="categoryModal">
+    <section class="sup-modal" role="dialog" aria-modal="true"
+             aria-labelledby="categoryModalTitle">
+      <div class="sup-modal-header">
+        <div>
+          <h2 id="categoryModalTitle">Nueva categoría</h2>
+          <p>Completa los datos. El campo marcado con * es obligatorio.</p>
+        </div>
+        <button type="button" id="closeCategoryModal" class="sup-modal-close"
+                aria-label="Cerrar formulario">×</button>
+      </div>
+
+      <form id="categoryForm" novalidate>
+        <div class="sup-form-grid">
+          <div class="sup-field sup-full">
+            <label for="categoryName">Nombre de categoría <span class="sup-required">*</span></label>
+            <input type="text" id="categoryName" maxlength="100" required
+                   placeholder="Ej. Laptops, Monitores, Accesorios">
+            <small class="cat-form-hint">De 2 a 100 caracteres. Se aceptan letras, números y puntuación comercial básica.</small>
+            <small class="sup-field-error" data-error-for="name"></small>
+          </div>
+
+          <div class="sup-field sup-full">
+            <label for="categoryDescription">Descripción</label>
+            <textarea id="categoryDescription" rows="4"
+                      placeholder="Características o información adicional de la categoría. Sin límite adicional."></textarea>
+            <small class="sup-field-error" data-error-for="description"></small>
+          </div>
+
+          <div class="sup-field sup-full cat-status-field">
+            <label for="categoryActive">Estado</label>
+            <select id="categoryActive">
+              <option value="true">Activa</option>
+              <option value="false">Inactiva</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="categoryFormError" class="sup-form-error sup-hidden" role="alert"></div>
+        <div class="sup-modal-actions">
+          <button type="button" id="cancelCategory" class="sup-btn sup-btn-outline">Cancelar</button>
+          <button type="submit" id="saveCategory" class="sup-btn sup-btn-primary">Guardar categoría</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div class="sup-toast sup-hidden" id="categoryToast" role="status" aria-live="polite"></div>
+</body>
+</html>

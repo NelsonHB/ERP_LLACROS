@@ -13,3 +13,10 @@
 # Sistema
 .DS_Store
 Thumbs.db
+
+.env
+.env.*
+!.env.example
+backup_erp_completo.sql
+respaldo_*/
+*.bak

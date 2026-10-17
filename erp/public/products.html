@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Inventario | EZCUDO360</title>
+
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/inventory.css?v=1">
+
+  <script src="/js/sidebar.js" defer></script>
+  <script src="/js/inventory.js?v=1" defer></script>
+</head>
+
+<body>
+  <div class="app-layout">
+
+    <!-- SIDEBAR COMPARTIDO -->
+    <div id="sidebar-container"></div>
+
+    <main class="inventory-main">
+
+      <!-- ENCABEZADO -->
+      <header class="inventory-topbar">
+        <div>
+          <h1>Inventario</h1>
+          <p>
+            Administra precios de venta, existencias
+            y movimientos de productos.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="inv-btn inv-btn-outline"
+          id="refreshInventory"
+        >
+          ↻ Actualizar inventario
+        </button>
+      </header>
+
+      <div class="inventory-content">
+
+        <!-- ESTADÍSTICAS -->
+        <section class="inv-stats">
+
+          <article class="inv-stat">
+            <div class="inv-stat-icon">▤</div>
+            <div>
+              <small>Productos activos</small>
+              <strong id="statProducts">0</strong>
+            </div>
+          </article>
+
+          <article class="inv-stat">
+            <div class="inv-stat-icon inv-icon-green">▣</div>
+            <div>
+              <small>Unidades disponibles</small>
+              <strong id="statUnits">0</strong>
+            </div>
+          </article>
+
+          <article class="inv-stat">
+            <div class="inv-stat-icon inv-icon-orange">!</div>
+            <div>
+              <small>Stock bajo (1 a 5)</small>
+              <strong id="statLow">0</strong>
+            </div>
+          </article>
+
+          <article class="inv-stat">
+            <div class="inv-stat-icon inv-icon-red">×</div>
+            <div>
+              <small>Productos agotados</small>
+              <strong id="statOut">0</strong>
+            </div>
+          </article>
+
+          <article class="inv-stat">
+            <div class="inv-stat-icon inv-icon-purple">S/</div>
+            <div>
+              <small>Valor potencial de venta</small>
+              <strong id="statValue">S/ 0.00</strong>
+            </div>
+          </article>
+
+        </section>
+
+        <!-- LISTADO -->
+        <section class="inv-panel">
+
+          <div class="inv-panel-heading">
+            <div>
+              <h2>Productos en inventario</h2>
+              <p>
+                Busca productos, configura su precio
+                y consulta sus movimientos.
+              </p>
+            </div>
+
+            <div class="inv-legend">
+              <span class="inv-dot inv-dot-green"></span>
+              Disponible
+
+              <span class="inv-dot inv-dot-orange"></span>
+              Bajo
+
+              <span class="inv-dot inv-dot-red"></span>
+              Agotado
+            </div>
+          </div>
+
+          <!-- FILTROS -->
+          <div class="inv-filters">
+
+            <div class="inv-search">
+              <span>⌕</span>
+              <input
+                type="search"
+                id="inventorySearch"
+                placeholder="Buscar nombre, código o marca..."
+                autocomplete="off"
+              >
+            </div>
+
+            <select
+              id="inventoryCategory"
+              aria-label="Filtrar categoría"
+            >
+              <option value="">Todas las categorías</option>
+            </select>
+
+            <select
+              id="inventoryStock"
+              aria-label="Filtrar existencias"
+            >
+              <option value="all">Todos los productos</option>
+              <option value="available">Stock mayor a 5</option>
+              <option value="low">Stock bajo (1 a 5)</option>
+              <option value="out">Agotados</option>
+              <option value="unpriced">Sin precio de venta</option>
+            </select>
+
+          </div>
+
+          <!-- TABLA -->
+          <div class="inv-table-scroll">
+            <table class="inv-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Stock actual</th>
+                  <th>Precio de venta</th>
+                  <th>Valor en stock</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody id="inventoryTable">
+                <tr>
+                  <td colspan="6" class="inv-empty">
+                    Cargando inventario...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- PAGINACIÓN -->
+          <div class="inv-pagination">
+            <span id="inventoryPageInfo">
+              Mostrando 0 productos
+            </span>
+
+            <div>
+              <button
+                class="inv-btn inv-btn-outline"
+                id="inventoryPrevious"
+                type="button"
+              >
+                ← Anterior
+              </button>
+
+              <button
+                class="inv-btn inv-btn-outline"
+                id="inventoryNext"
+                type="button"
+              >
+                Siguiente →
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- NOTA -->
+        <div class="inv-note">
+          <strong>Control de existencias:</strong>
+          cuando una compra se recibe correctamente,
+          las cantidades ingresan al inventario.
+          Cambiar el precio de venta no altera el stock.
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL PARA PRECIO DE VENTA -->
+  <div class="inv-overlay inv-hidden" id="priceModal">
+    <section
+      class="inv-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="priceModalTitle"
+    >
+      <div class="inv-modal-header">
+        <div>
+          <h2 id="priceModalTitle">Configurar precio de venta</h2>
+          <p>
+            Define el precio que se utilizará
+            para vender este producto.
+          </p>
+        </div>
+
+        <button
+          class="inv-close"
+          id="closePriceModal"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="priceForm">
+        <div class="inv-modal-body">
+
+          <div class="inv-product-summary">
+            <div id="priceProductImage"></div>
+
+            <div>
+              <strong id="priceProductName">Producto</strong>
+              <small id="priceProductCode">Código</small>
+              <small id="priceProductStock">Stock</small>
+            </div>
+          </div>
+
+          <div class="inv-form-field">
+            <label for="newSalePrice">
+              Precio de venta (S/)
+            </label>
+
+            <input
+              type="number"
+              id="newSalePrice"
+              min="0.01"
+              step="0.01"
+              max="9999999999.99"
+              placeholder="Ej. 150.00"
+              required
+            >
+
+            <small>
+              Ingresa un importe mayor a cero,
+              con máximo dos decimales.
+            </small>
+          </div>
+
+          <div
+            class="inv-error inv-hidden"
+            id="priceError"
+            role="alert"
+          ></div>
+
+          <p class="inv-help">
+            Este cambio afectará el precio vigente
+            del producto. No modificará compras anteriores.
+          </p>
+        </div>
+
+        <div class="inv-modal-footer">
+          <button
+            class="inv-btn inv-btn-outline"
+            type="button"
+            id="cancelPrice"
+          >
+            Cancelar
+          </button>
+
+          <button
+            class="inv-btn inv-btn-primary"
+            type="submit"
+            id="savePrice"
+          >
+            Guardar precio
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- MODAL DE MOVIMIENTOS -->
+  <div class="inv-overlay inv-hidden" id="movementsModal">
+    <section
+      class="inv-modal inv-modal-wide"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="movementsTitle"
+    >
+      <div class="inv-modal-header">
+        <div>
+          <h2 id="movementsTitle">Movimientos del producto</h2>
+          <p id="movementsSubtitle">
+            Historial de entradas y salidas
+          </p>
+        </div>
+
+        <button
+          class="inv-close"
+          type="button"
+          id="closeMovements"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="inv-modal-body">
+        <div class="inv-table-scroll">
+          <table class="inv-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Stock anterior</th>
+                <th>Stock posterior</th>
+                <th>Motivo</th>
+              </tr>
+            </thead>
+
+            <tbody id="movementsTable">
+              <tr>
+                <td colspan="6" class="inv-empty">
+                  Cargando movimientos...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="inv-modal-footer">
+        <button
+          class="inv-btn inv-btn-outline"
+          id="closeMovementsBottom"
+          type="button"
+        >
+          Cerrar
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- NOTIFICACIONES -->
+  <div
+    id="inventoryToast"
+    class="inv-toast inv-hidden"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+</body>
+</html>

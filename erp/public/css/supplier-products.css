@@ -1,0 +1,133 @@
+/* ============================================
+   EZCUDO360 - PRODUCTOS POR PROVEEDOR
+   COMPLEMENTO AL CSS ORIGINAL DE PROVEEDORES.
+   Conserva su topbar, estadísticas, panel y modal.
+   ============================================ */
+
+.sp-filter-row { flex-wrap: wrap; }
+.sp-filter-row > select { max-width: 200px; }
+
+.sp-table { min-width: 1050px; }
+.sp-product-cell {
+  display: flex; align-items: center; gap: 12px;
+  min-width: 205px;
+}
+.sp-product-cell .sup-provider-name { min-width: 0; }
+.sp-photo {
+  width: 51px; height: 51px; min-width: 51px;
+  object-fit: cover; border-radius: 10px;
+  border: 1px solid #e5eaf1; background: #f1f5f9;
+}
+.sp-photo-empty {
+  display: grid; place-items: center; width: 51px; height: 51px;
+  flex: 0 0 51px; border-radius: 10px; background: #eff6ff;
+  color: #64748b; font-size: 23px; border: 1px solid #e5eaf1;
+}
+.sp-product-id { color: #94a3b8; font-size: 11px; }
+.sp-value { color: #0f172a; font-weight: 700; white-space: nowrap; }
+.sp-secondary { display: block; margin-top: 4px; color: #94a3b8; font-size: 11px; }
+.sp-note { font-size: 12px; color: #64748b; }
+.sp-table .sup-actions { flex-wrap: wrap; }
+.sp-table .sup-action-btn { white-space: nowrap; }
+
+/* MODAL: mismo diseño y dimensiones ligeramente mayores para datos técnicos */
+.sp-modal-large { width: min(790px, 100%); }
+.sp-form-banner {
+  padding: 12px 14px; margin: 0 0 18px;
+  border: 1px solid #fecaca; background: #fef2f2;
+  color: #991b1b; border-radius: 8px; font-size: 13px;
+}
+.sp-modes { display: flex; gap: 16px; flex-wrap: wrap; }
+.sp-modes label {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: #f8fafc; border: 1px solid #e5eaf1;
+  padding: 11px 13px; border-radius: 9px; font-size: 13px;
+  cursor: pointer;
+}
+.sp-modes input { accent-color: #2563eb; }
+.sp-new-fields { min-width: 0; }
+.sp-new-fields > .sup-form-grid { margin-top: 1px; }
+.sp-catalog-list { height: auto !important; min-height: 145px; }
+.sp-catalog-list option { padding: 8px; }
+.sp-notice {
+  background: #eff6ff; color: #1e40af;
+  padding: 13px; border-radius: 9px; border: 1px solid #bfdbfe;
+  font-size: 12px; line-height: 1.5;
+}
+.sup-field input.sp-invalid, .sup-field select.sp-invalid {
+  border-color: #dc2626; background: #fffafa;
+}
+.sp-form-banner:focus { outline: none; }
+.sp-submitted { opacity: 0.65; }
+.sp-file-progress { font-size: 12px; color: #475569; margin-top: 10px; }
+.sp-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 13px; margin: 15px 0 20px;
+}
+.sp-gallery-card {
+  overflow: hidden; border: 1px solid #e5eaf1;
+  border-radius: 10px; background: #fff;
+}
+.sp-gallery-card img { width: 100%; height: 125px; display: block; object-fit: cover; }
+.sp-gallery-caption {
+  padding: 10px; font-size: 12px; line-height: 1.5;
+}
+.sp-gallery-actions { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+.sp-gallery-actions button {
+  background: #f8fafc; border: 1px solid #dbe2eb;
+  border-radius: 6px; padding: 6px 7px; font-size: 11px;
+  font-family: inherit; cursor: pointer;
+}
+.sp-gallery-actions button:hover { background: #eff6ff; }
+.sp-gallery-actions button:disabled { opacity: .5; cursor: not-allowed; }
+.sp-detail-main { display: flex; gap: 18px; align-items: flex-start; }
+.sp-detail-cover {
+  flex: 0 0 150px; width: 150px; height: 150px;
+  border-radius: 12px; border: 1px solid #e5eaf1;
+  object-fit: contain; background: #f8fafc;
+}
+.sp-detail-cover-empty {
+  display: grid; place-items: center; font-size: 52px;
+  color: #94a3b8;
+}
+.sp-detail-main h3 { margin: 0 0 11px; font-size: 20px; }
+.sp-detail-main p { margin: 5px 0; font-size: 13px; line-height: 1.5; }
+.sp-detail-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px; margin: 19px 0;
+}
+.sp-detail-entry {
+  padding: 12px; border: 1px solid #e5eaf1; border-radius: 9px;
+  overflow-wrap: anywhere; background: #fafcff;
+}
+.sp-detail-entry small { display: block; color: #64748b; margin-bottom: 6px; }
+.sp-detail-entry strong { font-size: 13px; }
+.sp-details-heading { font-size: 15px; margin: 23px 0 11px; }
+.sp-gallery-upload {
+  border-top: 1px solid #e5eaf1; margin-top: 20px;
+  padding-top: 16px;
+}
+.sp-gallery-upload input { font-size: 12px; margin: 8px 0 10px; }
+.sp-gallery-upload p { color: #64748b; font-size: 11px; margin: 5px 0 10px; }
+.sp-detail-actions { border-top: 1px solid #e5eaf1; padding-top: 14px; }
+.sp-missing { color: #64748b; font-size: 13px; }
+.sp-modal-large .sup-field-error { display: none; color: #dc2626; font-size: 11px; }
+.sp-modal-large .sup-field-error:not(:empty) { display: block; }
+
+@media (max-width: 850px) {
+  .sp-detail-main { flex-direction: column; }
+  .sp-detail-grid { grid-template-columns: 1fr; }
+  .sp-filter-row > select { width: 100%; max-width: none; }
+  .sp-modes { flex-direction: column; gap: 8px; }
+}
+/* Nota informativa al editar: no es un error */
+.sp-form-banner.sp-info-banner {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+/* Información de proveedores, sin alterar el diseño de Proveedores */
+.sp-suppliers-summary { margin: 0 24px 14px; color: #64748b; font-size: 12px; }
+.sp-load-warnings { margin: 0 24px 16px; }

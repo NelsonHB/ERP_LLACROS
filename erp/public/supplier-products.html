@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos por proveedor | EZCUDO360</title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <!-- Reutiliza EXACTAMENTE el diseño original de Proveedores -->
+  <link rel="stylesheet" href="/css/suppliers.css?v=8">
+  <link rel="stylesheet" href="/css/supplier-products.css?v=2">
+  <script src="/js/sidebar.js" defer></script>
+  <script src="/js/supplier-products.js?v=2" defer></script>
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="suppliers-main">
+      <!-- MISMO TOPBAR DE PROVEEDORES -->
+      <header class="suppliers-topbar">
+        <div>
+          <h1>Productos por proveedor</h1>
+          <p>Catálogo, asociaciones e imágenes de productos por proveedor</p>
+        </div>
+        <button id="spNew" type="button" class="sup-btn sup-btn-primary">+ Asociar producto</button>
+      </header>
+
+      <div class="suppliers-content">
+        <!-- MISMAS TARJETAS -->
+        <section class="suppliers-stats" aria-label="Resumen de asociaciones">
+          <article class="sup-stat-card">
+            <div class="sup-stat-icon" aria-hidden="true">▣</div>
+            <div><span>Productos asociados</span><strong id="spTotal">0</strong></div>
+          </article>
+          <article class="sup-stat-card">
+            <div class="sup-stat-icon sup-icon-green" aria-hidden="true">✓</div>
+            <div><span>Asociaciones activas</span><strong id="spActive">0</strong></div>
+          </article>
+          <article class="sup-stat-card">
+            <div class="sup-stat-icon sup-icon-red" aria-hidden="true">▧</div>
+            <div><span>Asociaciones inactivas</span><strong id="spInactive">0</strong></div>
+          </article>
+        </section>
+
+        <!-- MISMO PANEL -->
+        <section class="suppliers-panel">
+          <div class="sup-panel-heading">
+            <div>
+              <h2>Catálogo por proveedor</h2>
+              <p>Un producto puede pertenecer a varios proveedores sin duplicarse en el inventario.</p>
+            </div>
+            <button id="spRefresh" type="button" class="sup-btn sup-btn-outline">Actualizar</button>
+          </div>
+
+          <p class="sp-suppliers-summary" id="spSuppliersSummary" role="status">Consultando proveedores registrados...</p>
+          <div id="spLoadWarnings" class="sp-form-banner sp-load-warnings sup-hidden" role="alert"></div>
+
+          <div class="suppliers-filters sp-filter-row">
+            <div class="sup-search">
+              <input id="spSearch" type="search" placeholder="Buscar por producto, código, marca o proveedor..."
+                     autocomplete="off" aria-label="Buscar productos por proveedor">
+            </div>
+            <select id="spSupplierFilter" aria-label="Filtrar por proveedor">
+              <option value="">Todos los proveedores</option>
+            </select>
+            <select id="spStatusFilter" aria-label="Filtrar por estado">
+              <option value="all">Todos los estados</option>
+              <option value="active">Activos</option>
+              <option value="inactive">Inactivos</option>
+            </select>
+          </div>
+
+          <div class="sup-table-container">
+            <table class="sup-table sp-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Código</th>
+                  <th>Proveedor</th>
+                  <th>Costo referencial</th>
+                  <th>Precio de venta</th>
+                  <th>Imágenes</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="spTable">
+                <tr><td colspan="8" class="sup-empty">Cargando productos por proveedor...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sup-table-footer" id="spCount">Mostrando 0 asociaciones</div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL ALTA Y EDICIÓN: MISMO DISEÑO DE PROVEEDORES -->
+  <div id="spModal" class="sup-modal-overlay sup-hidden">
+    <section class="sup-modal sp-modal-large" role="dialog" aria-modal="true" aria-labelledby="spModalTitle">
+      <div class="sup-modal-header">
+        <div>
+          <h2 id="spModalTitle">Asociar producto a un proveedor</h2>
+          <p>El costo referencial no modifica el precio de venta ni el stock.</p>
+        </div>
+        <button id="spClose" type="button" class="sup-modal-close" aria-label="Cerrar formulario">×</button>
+      </div>
+
+      <form id="spForm" novalidate>
+        <div id="spFormError" class="sp-form-banner sup-hidden" role="alert"></div>
+        <div class="sup-form-grid">
+          <div class="sup-field sup-full">
+            <label for="spSupplierId">Proveedor <span class="sup-required">*</span></label>
+            <select id="spSupplierId" required>
+              <option value="">Selecciona un proveedor</option>
+            </select>
+            <small id="spSupplierHelp" class="sup-field-help">Cargando proveedores activos...</small>
+            <small class="sup-field-error" data-sp-error="supplierId"></small>
+          </div>
+
+          <div class="sup-field sup-full" id="spModeBlock">
+            <label>¿Qué quieres hacer?</label>
+            <div class="sp-modes" role="group" aria-label="Tipo de asociación">
+              <label><input type="radio" name="spMode" value="existing" checked> Asociar producto existente</label>
+              <label><input type="radio" name="spMode" value="new"> Crear producto nuevo y asociarlo</label>
+            </div>
+          </div>
+
+          <div class="sup-field sup-full" id="spExistingBlock">
+            <label for="spProductId">Producto del inventario <span class="sup-required">*</span></label>
+            <input type="search" id="spCatalogSearch" placeholder="Filtrar por nombre, código o marca..." autocomplete="off">
+            <select id="spProductId" size="5" class="sp-catalog-list">
+              <option value="">Primero selecciona un proveedor...</option>
+            </select>
+            <small class="sup-field-help">Puedes vincular el mismo producto a distintos proveedores.</small>
+            <small class="sup-field-error" data-sp-error="productId"></small>
+          </div>
+
+          <div class="sp-new-fields sup-hidden sup-full" id="spNewProductBlock">
+            <div class="sup-form-grid">
+              <div class="sup-field">
+                <label for="spCode">Código de producto <span class="sup-required">*</span></label>
+                <input id="spCode" type="text" maxlength="50" placeholder="Ej. LAP-001" autocomplete="off">
+                <small class="sup-field-error" data-sp-error="code"></small>
+              </div>
+              <div class="sup-field">
+                <label for="spBarcode">Código de barras</label>
+                <input id="spBarcode" type="text" maxlength="100" placeholder="Opcional" autocomplete="off">
+                <small class="sup-field-error" data-sp-error="barcode"></small>
+              </div>
+              <div class="sup-field sup-full">
+                <label for="spName">Nombre del producto <span class="sup-required">*</span></label>
+                <input id="spName" type="text" maxlength="150" placeholder="Ej. Laptop Lenovo IdeaPad 15">
+                <small class="sup-field-error" data-sp-error="name"></small>
+              </div>
+              <div class="sup-field">
+                <label for="spBrand">Marca</label>
+                <input id="spBrand" type="text" maxlength="100" placeholder="Ej. Lenovo">
+                <small class="sup-field-error" data-sp-error="brand"></small>
+              </div>
+              <div class="sup-field">
+                <label for="spModel">Modelo</label>
+                <input id="spModel" type="text" maxlength="100" placeholder="Ej. IdeaPad Slim 3">
+                <small class="sup-field-error" data-sp-error="model"></small>
+              </div>
+              <div class="sup-field">
+                <label for="spCategoryId">Categoría</label>
+                <select id="spCategoryId"><option value="">Sin categoría</option></select>
+                <small class="sup-field-error" data-sp-error="categoryId"></small>
+              </div>
+              <div class="sup-field">
+                <label for="spUnit">Unidad de medida</label>
+                <select id="spUnit">
+                  <option value="UNIDAD">Unidad</option>
+                  <option value="CAJA">Caja</option>
+                  <option value="PAQUETE">Paquete</option>
+                  <option value="PAR">Par</option>
+                  <option value="METRO">Metro</option>
+                  <option value="KILO">Kilo</option>
+                </select>
+                <small class="sup-field-error" data-sp-error="unit"></small>
+              </div>
+              <div class="sup-field sup-full">
+                <label for="spDescription">Descripción detallada</label>
+                <textarea id="spDescription" rows="3" placeholder="Especificaciones y características del producto..."></textarea>
+              </div>
+              <div class="sup-field sup-full sp-notice">
+                El producto se creará con stock 0 y precio de venta S/ 0.00.
+                El precio de venta se asignará manualmente desde Inventario.
+              </div>
+            </div>
+          </div>
+
+          <div class="sup-field">
+            <label for="spSupplierSku">Código usado por el proveedor</label>
+            <input id="spSupplierSku" type="text" maxlength="100" placeholder="SKU del proveedor (opcional)">
+            <small class="sup-field-error" data-sp-error="supplierSku"></small>
+          </div>
+          <div class="sup-field">
+            <label for="spReferenceCost">Costo referencial (S/)</label>
+            <input id="spReferenceCost" type="text" inputmode="decimal" placeholder="Ej. 125.50" autocomplete="off">
+            <small class="sup-field-help">Solo referencia. La compra podrá tener otro costo real.</small>
+            <small class="sup-field-error" data-sp-error="referenceCost"></small>
+          </div>
+          <div class="sup-field sup-full" id="spActiveBlock">
+            <label for="spLinkActive">Estado de la asociación</label>
+            <select id="spLinkActive">
+              <option value="true">Activo</option>
+              <option value="false">Inactivo</option>
+            </select>
+            <small class="sup-field-error" data-sp-error="active"></small>
+          </div>
+          <div class="sup-field sup-full">
+            <label for="spImages">Imágenes del producto</label>
+            <input id="spImages" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+            <small class="sup-field-help">
+              JPG, PNG o WEBP. Máximo 5 MB por foto, hasta 8 imágenes por producto.
+              Las fotos pertenecen al producto global y serán visibles en todos sus proveedores.
+            </small>
+            <small class="sup-field-error" data-sp-error="image"></small>
+          </div>
+        </div>
+        <div class="sup-modal-actions">
+          <button type="button" class="sup-btn sup-btn-outline" id="spCancel">Cancelar</button>
+          <button type="submit" class="sup-btn sup-btn-primary" id="spSave">Guardar asociación</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- DETALLE + GALERÍA DE IMÁGENES -->
+  <div id="spDetailModal" class="sup-modal-overlay sup-hidden">
+    <section class="sup-modal sp-modal-large" role="dialog" aria-modal="true" aria-labelledby="spDetailTitle">
+      <div class="sup-modal-header">
+        <div>
+          <h2 id="spDetailTitle">Detalle del producto</h2>
+          <p>Información de inventario, proveedor e imágenes compartidas.</p>
+        </div>
+        <button id="spDetailClose" type="button" class="sup-modal-close" aria-label="Cerrar detalle">×</button>
+      </div>
+      <div id="spDetailBody"></div>
+      <div class="sup-modal-actions sp-detail-actions">
+        <button type="button" id="spDetailDone" class="sup-btn sup-btn-outline">Cerrar</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="spToast" class="sup-toast sup-hidden" role="status" aria-live="polite"></div>
+</body>
+</html>

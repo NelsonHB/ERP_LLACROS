@@ -1,0 +1,224 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Inventario | EZCUDO360</title>
+
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/inventory.css">
+
+  <script src="/js/sidebar.js" defer></script>
+  <script src="/js/inventory.js" defer></script>
+</head>
+<body>
+  <div class="app-layout">
+
+    <div id="sidebar-container"></div>
+
+    <div class="inventory-main">
+      <header class="inventory-topbar">
+        <div>
+          <h1>Inventario</h1>
+          <p>Administración de productos y existencias</p>
+        </div>
+        <button id="newProductBtn" class="inv-btn inv-primary">
+          + Nuevo producto
+        </button>
+      </header>
+
+      <main class="inventory-content">
+
+        <section class="inventory-stats">
+          <article class="inventory-stat">
+            <span>Productos registrados</span>
+            <strong id="totalProducts">0</strong>
+          </article>
+
+          <article class="inventory-stat">
+            <span>Unidades disponibles</span>
+            <strong id="totalStock">0</strong>
+          </article>
+
+          <article class="inventory-stat">
+            <span>Stock bajo</span>
+            <strong id="lowStock">0</strong>
+          </article>
+
+          <article class="inventory-stat">
+            <span>Valor de inventario</span>
+            <strong id="inventoryValue">S/ 0.00</strong>
+          </article>
+        </section>
+
+        <section class="inventory-panel">
+          <div class="inventory-panel-heading">
+            <div>
+              <h2>Lista de productos</h2>
+              <p>Consulta y administra tu catálogo.</p>
+            </div>
+            <button id="refreshProductsBtn" class="inv-btn">
+              Actualizar
+            </button>
+          </div>
+
+          <div class="inventory-filters">
+            <input
+              id="productSearch"
+              type="search"
+              placeholder="Buscar por nombre, código o marca..."
+            >
+
+            <select id="categoryFilter">
+              <option value="">Todas las categorías</option>
+            </select>
+
+            <select id="statusFilter">
+              <option value="all">Todos los estados</option>
+              <option value="active">Activos</option>
+              <option value="inactive">Inactivos</option>
+              <option value="low">Stock bajo</option>
+            </select>
+          </div>
+
+          <div class="inventory-table-wrap">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Código</th>
+                  <th>Categoría</th>
+                  <th>Precio venta</th>
+                  <th>Costo</th>
+                  <th>Stock</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="productsTable">
+                <tr>
+                  <td colspan="8" class="inventory-empty">
+                    Cargando productos...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p id="productsCount" class="inventory-count"></p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL PRODUCTO -->
+  <div id="productModal" class="inv-modal-backdrop inv-hidden">
+    <div class="inv-modal" role="dialog"
+         aria-modal="true" aria-labelledby="productModalTitle">
+
+      <div class="inv-modal-heading">
+        <div>
+          <h2 id="productModalTitle">Nuevo producto</h2>
+          <p>Completa la información del producto.</p>
+        </div>
+        <button type="button" id="closeProductModal"
+                class="inv-close" aria-label="Cerrar">×</button>
+      </div>
+
+      <form id="productForm">
+        <div class="inv-form-grid">
+
+          <label>
+            Código *
+            <input id="productCode" maxlength="50" required>
+          </label>
+
+          <label>
+            Nombre *
+            <input id="productName" maxlength="200" required>
+          </label>
+
+          <label>
+            Categoría *
+            <input id="productCategory" maxlength="100"
+                   list="categorySuggestions" required>
+            <datalist id="categorySuggestions">
+              <option value="Laptops">
+              <option value="Periféricos">
+              <option value="Componentes">
+              <option value="Accesorios">
+            </datalist>
+          </label>
+
+          <label>
+            Marca
+            <input id="productBrand" maxlength="100">
+          </label>
+
+          <label>
+            Precio de venta (S/) *
+            <input id="productPrice" type="number"
+                   min="0" step="0.01" required>
+          </label>
+
+          <label>
+            Costo unitario (S/) *
+            <input id="productCost" type="number"
+                   min="0" step="0.01" required>
+          </label>
+
+          <label>
+            Unidad
+            <select id="productUnit">
+              <option value="unidad">Unidad</option>
+              <option value="caja">Caja</option>
+              <option value="paquete">Paquete</option>
+            </select>
+          </label>
+
+          <label>
+            Stock mínimo
+            <input id="productMinimumStock" type="number"
+                   min="0" step="1" value="0">
+          </label>
+
+          <label class="inv-full">
+            Descripción
+            <textarea id="productDescription" rows="3"></textarea>
+          </label>
+
+          <label class="inv-full">
+            Imágenes del producto (JPG, PNG o WEBP)
+            <input id="productImages" type="file"
+                   accept=".jpg,.jpeg,.png,.webp"
+                   multiple>
+            <small>Puedes seleccionar varias imágenes. Máximo 5 MB por archivo.</small>
+          </label>
+
+          <div id="imagePreview" class="inv-image-preview inv-full"></div>
+
+          <div class="inv-full inv-note">
+            El producto se registra con stock inicial 0.
+            Las existencias se incorporarán desde Compras.
+          </div>
+        </div>
+
+        <p id="productFormError" class="inv-error inv-hidden"></p>
+
+        <div class="inv-modal-actions">
+          <button type="button" id="cancelProductBtn"
+                  class="inv-btn">Cancelar</button>
+          <button type="submit" id="saveProductBtn"
+                  class="inv-btn inv-primary">Guardar producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="inventoryToast" class="inv-toast inv-hidden"
+       role="status"></div>
+</body>
+</html>

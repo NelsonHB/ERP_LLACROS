@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Clientes | EZCUDO360</title>
+
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/customers.css?v=1">
+
+  <script src="/js/sidebar.js" defer></script>
+  <script src="/js/customers.js?v=1" defer></script>
+</head>
+
+<body>
+  <div class="app-layout">
+    <!-- SIDEBAR COMPARTIDO -->
+    <div id="sidebar-container"></div>
+
+    <main class="customers-main">
+      <header class="customers-topbar">
+        <div>
+          <h1>Clientes</h1>
+          <p>
+            Administra los datos de tus clientes
+            y mantén actualizado tu directorio.
+          </p>
+        </div>
+
+        <button
+          id="newCustomer"
+          type="button"
+          class="cus-btn cus-btn-primary"
+        >
+          + Nuevo cliente
+        </button>
+      </header>
+
+      <div class="customers-content">
+
+        <!-- TARJETAS DE RESUMEN -->
+        <section class="cus-stats">
+          <article class="cus-stat">
+            <span class="cus-stat-icon">♙</span>
+            <div>
+              <small>Total de clientes</small>
+              <strong id="statTotal">0</strong>
+            </div>
+          </article>
+
+          <article class="cus-stat">
+            <span class="cus-stat-icon cus-green">✓</span>
+            <div>
+              <small>Clientes activos</small>
+              <strong id="statActive">0</strong>
+            </div>
+          </article>
+
+          <article class="cus-stat">
+            <span class="cus-stat-icon cus-orange">◷</span>
+            <div>
+              <small>Clientes inactivos</small>
+              <strong id="statInactive">0</strong>
+            </div>
+          </article>
+
+          <article class="cus-stat">
+            <span class="cus-stat-icon cus-purple">▣</span>
+            <div>
+              <small>Clientes con RUC</small>
+              <strong id="statCompanies">0</strong>
+            </div>
+          </article>
+        </section>
+
+        <!-- LISTADO DE CLIENTES -->
+        <section class="cus-panel">
+          <div class="cus-panel-header">
+            <div>
+              <h2>Directorio de clientes</h2>
+              <p>
+                Consulta, edita y administra
+                los clientes registrados.
+              </p>
+            </div>
+
+            <button
+              id="refreshCustomers"
+              type="button"
+              class="cus-btn cus-btn-outline"
+            >
+              ↻ Actualizar
+            </button>
+          </div>
+
+          <div class="cus-filters">
+            <input
+              id="searchCustomers"
+              type="search"
+              placeholder="Buscar por nombre, DNI, RUC, correo o teléfono..."
+              autocomplete="off"
+            >
+
+            <select id="statusFilter">
+              <option value="all">Todos los estados</option>
+              <option value="active">Activos</option>
+              <option value="inactive">Inactivos</option>
+            </select>
+          </div>
+
+          <div class="cus-table-scroll">
+            <table class="cus-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Documento</th>
+                  <th>Contacto</th>
+                  <th>Dirección</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody id="customersTable">
+                <tr>
+                  <td colspan="6" class="cus-empty">
+                    Cargando clientes...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="cus-pagination">
+            <span id="customersPageInfo">
+              Mostrando 0 clientes
+            </span>
+
+            <div class="cus-page-buttons">
+              <button
+                id="previousCustomers"
+                type="button"
+                class="cus-btn cus-btn-outline"
+              >
+                ← Anterior
+              </button>
+
+              <button
+                id="nextCustomers"
+                type="button"
+                class="cus-btn cus-btn-outline"
+              >
+                Siguiente →
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL REGISTRAR / EDITAR -->
+  <div
+    class="cus-overlay cus-hidden"
+    id="customerModal"
+  >
+    <section
+      class="cus-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="customerModalTitle"
+    >
+      <div class="cus-modal-header">
+        <div>
+          <h2 id="customerModalTitle">
+            Nuevo cliente
+          </h2>
+          <p id="customerModalSubtitle">
+            Completa los datos del cliente.
+          </p>
+        </div>
+
+        <button
+          id="closeCustomerModal"
+          type="button"
+          class="cus-close"
+          aria-label="Cerrar ventana"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="customerForm" novalidate>
+        <div class="cus-modal-body">
+
+          <div
+            class="cus-error cus-hidden"
+            id="customerFormError"
+            role="alert"
+          ></div>
+
+          <div class="cus-form-grid">
+
+            <div class="cus-field">
+              <label for="customerDocumentType">
+                Tipo de documento *
+              </label>
+
+              <select
+                id="customerDocumentType"
+                required
+              >
+                <option value="DNI">DNI</option>
+                <option value="RUC">RUC</option>
+              </select>
+            </div>
+
+            <div class="cus-field">
+              <label for="customerDocumentNumber">
+                Número de documento *
+              </label>
+
+              <input
+                id="customerDocumentNumber"
+                type="text"
+                inputmode="numeric"
+                maxlength="8"
+                placeholder="Ingresa el documento"
+                required
+              >
+            </div>
+
+            <div class="cus-field cus-field-full">
+              <label for="customerName">
+                Nombre completo o razón social *
+              </label>
+
+              <input
+                id="customerName"
+                type="text"
+                maxlength="160"
+                placeholder="Ej. Juan Pérez o Empresa S.A.C."
+                required
+              >
+            </div>
+
+            <div class="cus-field">
+              <label for="customerPhone">
+                Teléfono
+              </label>
+
+              <input
+                id="customerPhone"
+                type="tel"
+                inputmode="numeric"
+                maxlength="9"
+                placeholder="Ej. 987654321"
+              >
+            </div>
+
+            <div class="cus-field">
+              <label for="customerEmail">
+                Correo electrónico
+              </label>
+
+              <input
+                id="customerEmail"
+                type="email"
+                maxlength="160"
+                placeholder="correo@ejemplo.com"
+              >
+            </div>
+
+            <div class="cus-field cus-field-full">
+              <label for="customerAddress">
+                Dirección
+              </label>
+
+              <textarea
+                id="customerAddress"
+                rows="3"
+                maxlength="255"
+                placeholder="Dirección del cliente (opcional)"
+              ></textarea>
+            </div>
+
+          </div>
+
+          <div class="cus-form-note">
+            Los campos marcados con * son obligatorios.
+            El DNI debe tener 8 dígitos y el RUC 11.
+          </div>
+        </div>
+
+        <div class="cus-modal-footer">
+          <button
+            id="cancelCustomer"
+            type="button"
+            class="cus-btn cus-btn-outline"
+          >
+            Cancelar
+          </button>
+
+          <button
+            id="saveCustomer"
+            type="submit"
+            class="cus-btn cus-btn-primary"
+          >
+            Guardar cliente
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- NOTIFICACIONES -->
+  <div
+    id="customersToast"
+    class="cus-toast cus-hidden"
+    role="status"
+    aria-live="polite"
+  ></div>
+</body>
+</html>
