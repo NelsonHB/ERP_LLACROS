@@ -1,8 +1,8 @@
+
 version: "3.8"
 
 # BASE DE DATOS: Postgres LOCAL (contenedor "postgres" de abajo), no Supabase.
-# Guía completa para cambiar a Supabase si hiciera falta más adelante:
-# ver DOCUMENTACION.md, sección "Cómo cambiar de Postgres local a Supabase".
+# Guía para cambiar a Supabase: ver DOCUMENTACION.md.
 
 services:
   postgres:
@@ -86,13 +86,7 @@ services:
     networks:
       - erp-net
 
-  # ---------------------------------------------------------------------
-  # Limpieza automática: corre "cleanup:expired-tokens" en cada app
-  # cada 6 horas, para no acumular tokens vencidos/olvidados.
-  #
-  # Carga el .env de cada app por separado (en un subshell) para no
-  # mezclar variables entre master-admin y erp (puertos/esquemas distintos).
-  # ---------------------------------------------------------------------
+  # Limpieza automática de tokens cada 6 horas.
   cron-cleanup:
     image: node:22-alpine
     container_name: cron-cleanup
@@ -115,6 +109,16 @@ services:
         sleep 21600;
       done
       "
+    networks:
+      - erp-net
+
+  # SERVICIO DE INTELIGENCIA ARTIFICIAL - ANALÍTICA PREDICTIVA
+  ml-analytics:
+    build:
+      context: ./ml-analytics
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
     networks:
       - erp-net
 

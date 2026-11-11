@@ -1396,3 +1396,4 @@ document.addEventListener(
     loadSales()
   }
 )
+    

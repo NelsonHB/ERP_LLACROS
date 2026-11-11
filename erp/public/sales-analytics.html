@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Analítica Predictiva | EZCUDO360</title>
+
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/sales-analytics.css?v=2">
+
+  <style>
+    .analytics-export {
+      background: #ffffff;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+    }
+
+    .analytics-export:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+
+  <script src="/js/sidebar.js" defer></script>
+  <script src="/js/sales-analytics.js?v=2" defer></script>
+</head>
+
+<body>
+  <div class="app-layout">
+
+    <div id="sidebar-container"></div>
+
+    <main class="analytics-main">
+
+      <header class="analytics-header">
+        <div>
+          <p class="analytics-eyebrow">INTELIGENCIA DE NEGOCIOS</p>
+          <h1>Analítica Predictiva de Ventas</h1>
+          <p>
+            Analiza el comportamiento histórico y estima ingresos
+            para los próximos meses.
+          </p>
+        </div>
+
+        <a href="/sales-history.html" class="analytics-back">
+          ← Historial de ventas
+        </a>
+      </header>
+
+      <section class="analytics-controls">
+
+        <div>
+          <label for="forecastHorizon">
+            Horizonte del pronóstico
+          </label>
+
+          <select id="forecastHorizon">
+            <option value="1">Próximo mes</option>
+            <option value="2">Próximos 2 meses</option>
+            <option value="3" selected>Próximos 3 meses</option>
+          </select>
+        </div>
+
+        <button
+          id="generateForecast"
+          class="analytics-primary"
+          type="button"
+        >
+          Generar pronóstico
+        </button>
+
+        <button
+          id="downloadReportPdf"
+          class="analytics-primary analytics-export"
+          type="button"
+          disabled
+        >
+          Descargar reporte PDF
+        </button>
+
+        <span id="lastUpdated" class="analytics-muted">
+          Aún no se ha generado un análisis.
+        </span>
+
+      </section>
+
+      <div
+        id="dataNotice"
+        class="analytics-notice analytics-hidden"
+        role="status"
+      ></div>
+
+      <section class="analytics-kpis">
+
+        <article class="analytics-card">
+          <span>Días históricos</span>
+          <strong id="kpiDays">—</strong>
+          <small>Calendario diario disponible</small>
+        </article>
+
+        <article class="analytics-card">
+          <span>Ventas de prueba detectadas</span>
+          <strong id="kpiSimulated">—</strong>
+          <small>Identificadas por prefijo SIM-</small>
+        </article>
+
+        <article class="analytics-card">
+          <span>Pronóstico de ingresos</span>
+          <strong id="kpiForecastRevenue">—</strong>
+          <small id="kpiForecastPeriod">
+            Horizonte seleccionado
+          </small>
+        </article>
+
+        <article class="analytics-card">
+          <span>Pronóstico de ventas</span>
+          <strong id="kpiForecastCount">—</strong>
+          <small>Operaciones estimadas</small>
+        </article>
+
+      </section>
+
+      <section class="analytics-panel">
+
+        <div class="analytics-panel-heading">
+          <div>
+            <h2>Ingresos históricos y pronosticados</h2>
+            <p>
+              Comparación mensual entre el historial y la
+              estimación del modelo.
+            </p>
+          </div>
+
+          <div class="analytics-legend">
+            <span><i class="legend-actual"></i>Histórico</span>
+            <span><i class="legend-forecast"></i>Pronóstico</span>
+          </div>
+        </div>
+
+        <div class="analytics-chart-wrap">
+          <canvas
+            id="forecastChart"
+            height="320"
+            aria-label="Gráfico de ingresos históricos y pronosticados"
+          ></canvas>
+
+          <p id="chartEmpty" class="analytics-empty">
+            Genera un pronóstico para visualizar el gráfico.
+          </p>
+        </div>
+
+      </section>
+
+      <section class="analytics-two-columns">
+
+        <div class="analytics-panel">
+
+          <div class="analytics-panel-heading">
+            <div>
+              <h2>Pronóstico por mes</h2>
+              <p>Ingresos y cantidad de ventas estimadas.</p>
+            </div>
+          </div>
+
+          <div class="analytics-table-wrap">
+            <table class="analytics-table">
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th>Ingresos estimados</th>
+                  <th>Ventas estimadas</th>
+                  <th>Ticket promedio</th>
+                </tr>
+              </thead>
+
+              <tbody id="forecastTable">
+                <tr>
+                  <td colspan="4" class="analytics-empty">
+                    Sin pronóstico disponible.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <div class="analytics-panel">
+
+          <div class="analytics-panel-heading">
+            <div>
+              <h2>Evaluación del modelo</h2>
+              <p>
+                Validación cronológica con datos anteriores
+                al período evaluado.
+              </p>
+            </div>
+          </div>
+
+          <div class="analytics-evaluation">
+
+            <div>
+              <span>Algoritmo</span>
+              <strong id="modelName">Random Forest</strong>
+            </div>
+
+            <div>
+              <span>MAE diario</span>
+              <strong id="modelMae">—</strong>
+            </div>
+
+            <div>
+              <span>WAPE</span>
+              <strong id="modelWape">—</strong>
+            </div>
+
+            <div>
+              <span>Días de validación</span>
+              <strong id="modelHoldout">—</strong>
+            </div>
+
+          </div>
+
+          <p id="modelEvaluationNote" class="analytics-muted">
+            Los indicadores aparecerán después de entrenar el modelo.
+          </p>
+
+        </div>
+
+      </section>
+
+      <section class="analytics-panel">
+
+        <div class="analytics-panel-heading">
+          <div>
+            <h2>Variables utilizadas por el modelo</h2>
+            <p>
+              Importancia relativa calculada por el Random Forest
+              para el objetivo de ingresos.
+            </p>
+          </div>
+        </div>
+
+        <div id="featureImportance" class="analytics-features">
+          <p class="analytics-muted">
+            Aún no hay información del entrenamiento.
+          </p>
+        </div>
+
+      </section>
+
+      <p class="analytics-disclaimer">
+        Las predicciones son estimaciones y no garantizan ventas futuras.
+        Los registros SIM- son datos ficticios de prueba.
+        Con tres meses de información no se justifican pronósticos
+        anuales ni conclusiones sobre estacionalidad de largo plazo.
+      </p>
+
+    </main>
+  </div>
+
+  <div
+    id="analyticsToast"
+    class="analytics-toast analytics-hidden"
+    role="status"
+  ></div>
+
+</body>
+</html>

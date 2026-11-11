@@ -16,6 +16,7 @@ import CategoriesController from '#controllers/categories_controller'
 import SupplierProductsController from '#controllers/supplier_products_controller'
 import PurchasesController from '#controllers/purchases_controller'
 import SalesController from '#controllers/sales_controller'
+import SalesAnalyticsController from '#controllers/sales_analytics_controller'
 
 // ============================================
 // EZCUDO360 - RUTAS PRINCIPALES
@@ -456,12 +457,22 @@ router.group(() => {
       'destroy',
     ])
 
-  })
+    })
     .prefix('/customers')
     .use(middleware.auth())
 
 
+  // ==========================================
+  // ANALÍTICA PREDICTIVA
+  // ==========================================
+
+  router.get('/sales-analytics/forecast', [
+    SalesAnalyticsController,
+    'forecast',
+  ]).use(middleware.auth())
+
 
 })
+
   .prefix('/api/v1')
   .use(throttle)
